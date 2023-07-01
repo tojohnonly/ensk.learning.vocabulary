@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import javax.swing.*;
 
-public class LearnVocabulary {
+public class StudyVocabulary {
 
     /**
      * Start Learning Vocabulary
