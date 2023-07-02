@@ -23,7 +23,7 @@ public class JAnimationLabel extends JLabel {
 
 	public JAnimationLabel(String text, int delay) {
 		this.DELAY = delay;
-		this.animationText = text;
+		this.animationText = (null != text) ? text : "";
 		this.animationTextIndex = 0;
 		timer = new Timer(DELAY, new ReboundListener());
 		timer.start();
@@ -39,7 +39,10 @@ public class JAnimationLabel extends JLabel {
 	}
 
 	public void setAnimationText(String text) {
-		if (animationText.equals(text)) {
+		if (null == text) {
+			text = "";
+		}
+		if (null != animationText && animationText.equals(text)) {
 			return;
 		}
 		super.setText("");

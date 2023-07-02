@@ -4,15 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class FrameContainer {
 
     // 各种字体
-    static Font wordFont = new Font("Microsoft YaHei UI",Font.PLAIN, 25);
+    static Font wordFont = new Font("Microsoft YaHei UI", Font.PLAIN, 25);
     static Font pronounceFont = new Font(Font.SERIF, Font.PLAIN, 17);
-    static Font translationFont = new Font("霞鹜文楷",Font.PLAIN, 19);
-    static Font exampleFont = new Font("霞鹜文楷",Font.PLAIN, 15);
-    static Font buttonFont = new Font("Microsoft YaHei UI",Font.PLAIN, 15);
+    static Font translationFont = new Font("霞鹜文楷", Font.PLAIN, 19);
+    static Font exampleFont = new Font("霞鹜文楷", Font.PLAIN, 15);
+    static Font buttonFont = new Font("Microsoft YaHei UI", Font.PLAIN, 15);
 
     // 颜色
     static Color panelBgColor = new Color(65, 63, 62);
@@ -46,6 +48,13 @@ public class FrameContainer {
         frame.add(modePanel);
         // frame.add(learningPanel);
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                DataProcessor.closeConnection();
+            }
+        });
+
         frame.setVisible(true);
     }
 
@@ -54,10 +63,10 @@ public class FrameContainer {
         JPanel panel = new JPanel();
         // 组件设置为绝对定位
         panel.setLayout(null);
-        // 设置背景色
+        // Background Color
         panel.setBackground(panelBgColor);
 
-        // 单词
+        // Summary
         JLabel summaryLabel = new JLabel("All Words: 5366, Learned: 2377");
         //JLabel summaryLabel = new JLabel("<html><body style=\"width:400px;text-align:center\">" + "All Words: 5366   Learned: 2377" + "<body></html>");
         summaryLabel.setBounds(80, 20, 250, 35);
@@ -73,22 +82,6 @@ public class FrameContainer {
         learningModeBtn.setBorder(new RoundBorder());
         learningModeBtn.setBorderPainted(false);
         learningModeBtn.setFocusPainted(false);
-        learningModeBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame.remove(modePanel);
-                frame.add(learningPanel);
-                frame.validate();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                learningModeBtn.setBackground(new Color(98, 96, 95));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                learningModeBtn.setBackground(new Color(83, 81, 80));
-            }
-        });
 
         // Review Learned Content Button
         final JRoundedButton reviewModeBtn = new JRoundedButton("Review Learned Content");
@@ -99,22 +92,6 @@ public class FrameContainer {
         reviewModeBtn.setBorder(new RoundBorder());
         reviewModeBtn.setBorderPainted(false);
         reviewModeBtn.setFocusPainted(false);
-        reviewModeBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame.remove(modePanel);
-                frame.add(learningPanel);
-                frame.validate();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                reviewModeBtn.setBackground(new Color(98, 96, 95));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                reviewModeBtn.setBackground(new Color(83, 81, 80));
-            }
-        });
 
         // Mixed Mode Button
         final JRoundedButton mixedModeBtn = new JRoundedButton("Mixed Mode");
@@ -125,32 +102,20 @@ public class FrameContainer {
         mixedModeBtn.setBorder(new RoundBorder());
         mixedModeBtn.setBorderPainted(false);
         mixedModeBtn.setFocusPainted(false);
-        mixedModeBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame.remove(modePanel);
-                frame.add(learningPanel);
-                frame.validate();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                mixedModeBtn.setBackground(new Color(98, 96, 95));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                mixedModeBtn.setBackground(new Color(83, 81, 80));
-            }
-        });
 
-        // 把空间加入到panel
+        // Add component to panel
         panel.add(summaryLabel);
         panel.add(learningModeBtn);
         panel.add(reviewModeBtn);
         panel.add(mixedModeBtn);
+
+        // Register Mode Panel Click Event
+        registerModePanelClickEvent(learningModeBtn, reviewModeBtn, mixedModeBtn);
+
         return panel;
     }
 
-    public static JPanel assembleLearningPanel(){
+    public static JPanel assembleLearningPanel() {
         JPanel panel = new JPanel();
         // 组件设置为绝对定位
         panel.setLayout(null);
@@ -158,29 +123,25 @@ public class FrameContainer {
         panel.setBackground(new Color(65, 63, 62));
 
         // word
-        JLabel wordLabel = new JLabel("unusually");
+        JAnimationLabel wordLabel = new JAnimationLabel("", 20);
         wordLabel.setBounds(30, 15, 400, 35);
         wordLabel.setFont(wordFont);
         wordLabel.setForeground(Color.WHITE);
 
         // pronounce
-        JLabel pronounceLabel = new JLabel("/ʌnˈjuːʒəli/");
+        JAnimationLabel pronounceLabel = new JAnimationLabel("", 20);
         pronounceLabel.setBounds(30, 60, 400, 25);
         pronounceLabel.setFont(pronounceFont);
         pronounceLabel.setForeground(Color.WHITE);
 
         // translation
-        final String translation = "a.不平常地，非常";
-        //String translation = "a.不平常地，非常 n.缺席，不在场；缺乏 vt.(使)加快；促进";
-        final JAnimationLabel translationLabel = new JAnimationLabel("*************");
+        final JAnimationLabel translationLabel = new JAnimationLabel("", 15);
         translationLabel.setBounds(30, 95, 400, 50);
         translationLabel.setFont(translationFont);
         translationLabel.setForeground(Color.WHITE);
 
         // example
-        final String example = "He was an unusually complex man. 他是个异常复杂的人。";
-        //String example = "";
-        final JAnimationLabel exampleLabel = new JAnimationLabel("*************", 10);
+        final JAnimationLabel exampleLabel = new JAnimationLabel("", 8);
         exampleLabel.setBounds(30, 145, 400, 55);
         exampleLabel.setFont(exampleFont);
         exampleLabel.setForeground(Color.WHITE);
@@ -194,22 +155,6 @@ public class FrameContainer {
         dkBtn.setBorder(new RoundBorder());
         dkBtn.setBorderPainted(false);
         dkBtn.setFocusPainted(false);
-        dkBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                translationLabel.setAnimationText(translation);
-                exampleLabel.setAnimationText(example);
-                //JOptionPane.showMessageDialog(panel, "Bad Folder Path !", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                dkBtn.setBackground(new Color(98, 96, 95));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                dkBtn.setBackground(new Color(83, 81, 80));
-            }
-        });
 
         // Hazy Memory Button
         final JRoundedButton hmBtn = new JRoundedButton("Hazy Memory");
@@ -220,22 +165,6 @@ public class FrameContainer {
         hmBtn.setBorder(new RoundBorder());
         hmBtn.setBorderPainted(false);
         hmBtn.setFocusPainted(false);
-        hmBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                translationLabel.setAnimationText(translation + "0");
-                exampleLabel.setAnimationText(example + "0");
-                //JOptionPane.showMessageDialog(panel, "Bad Folder Path !", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                hmBtn.setBackground(new Color(98, 96, 95));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                hmBtn.setBackground(new Color(83, 81, 80));
-            }
-        });
 
         // Keep in Mind Button
         final JRoundedButton kimBtn = new JRoundedButton("Keep in Mind");
@@ -246,22 +175,28 @@ public class FrameContainer {
         kimBtn.setBorder(new RoundBorder());
         kimBtn.setBorderPainted(false);
         kimBtn.setFocusPainted(false);
-        kimBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                translationLabel.setAnimationText(translation + "1啊快点发哈快速导航饭卡手动阀卡死的回复");
-                exampleLabel.setAnimationText(example + "啊手动阀手动阀");
-                //JOptionPane.showMessageDialog(panel, "Bad Folder Path !", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                kimBtn.setBackground(new Color(98, 96, 95));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                kimBtn.setBackground(new Color(83, 81, 80));
-            }
-        });
+
+        // Keep in Mind Button
+        final JRoundedButton nwBtn = new JRoundedButton("Next Word");
+        nwBtn.setBounds(95, 215, 190, 35);
+        nwBtn.setForeground(Color.WHITE);
+        nwBtn.setFont(buttonFont);
+        nwBtn.setBackground(buttonBgColor);
+        nwBtn.setBorder(new RoundBorder());
+        nwBtn.setBorderPainted(false);
+        nwBtn.setFocusPainted(false);
+        nwBtn.setVisible(false);
+
+        // Keep in Mind Button
+        final JRoundedButton btmBtn = new JRoundedButton("Mode");
+        btmBtn.setBounds(290, 215, 60, 35);
+        btmBtn.setForeground(Color.WHITE);
+        btmBtn.setFont(buttonFont);
+        btmBtn.setBackground(buttonBgColor);
+        btmBtn.setBorder(new RoundBorder());
+        btmBtn.setBorderPainted(false);
+        btmBtn.setFocusPainted(false);
+        btmBtn.setVisible(false);
 
         // Add component to panel
         panel.add(wordLabel);
@@ -271,7 +206,206 @@ public class FrameContainer {
         panel.add(dkBtn);
         panel.add(hmBtn);
         panel.add(kimBtn);
+        panel.add(nwBtn);
+        panel.add(btmBtn);
+
+        // Get First Word
+        DataProcessor.nextWord();
+        wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
+        pronounceLabel.setAnimationText(DataProcessor.getCurrentWord().getPronounce());
+        translationLabel.setAnimationText("*****************");
+        exampleLabel.setAnimationText("******************************");
+
+        // Add Mouse Listener
+        registerLearningPanelClickEvent(wordLabel, pronounceLabel, translationLabel, exampleLabel, dkBtn, hmBtn, kimBtn, nwBtn, btmBtn);
+
         return panel;
+    }
+
+    public static void registerModePanelClickEvent(JRoundedButton learningModeBtn, JRoundedButton reviewModeBtn, JRoundedButton mixedModeBtn) {
+
+        learningModeBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                frame.remove(modePanel);
+                frame.add(learningPanel);
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                learningModeBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                learningModeBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        reviewModeBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                frame.remove(modePanel);
+                frame.add(learningPanel);
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                reviewModeBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                reviewModeBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        mixedModeBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                frame.remove(modePanel);
+                frame.add(learningPanel);
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                mixedModeBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                mixedModeBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+    }
+
+    public static void registerLearningPanelClickEvent(JAnimationLabel wordLabel, JAnimationLabel pronounceLabel, JAnimationLabel translationLabel, JAnimationLabel exampleLabel,
+                                            JButton dkBtn, JButton hmBtn, JButton kimBtn, JButton nwBtn, JButton btmBtn) {
+        dkBtn.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
+                exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
+                dkBtn.setVisible(false);
+                hmBtn.setVisible(false);
+                kimBtn.setVisible(false);
+                nwBtn.setVisible(true);
+                btmBtn.setVisible(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                dkBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                dkBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        hmBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
+                exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
+                dkBtn.setVisible(false);
+                hmBtn.setVisible(false);
+                kimBtn.setVisible(false);
+                nwBtn.setVisible(true);
+                btmBtn.setVisible(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                hmBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                hmBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        kimBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
+                exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
+                dkBtn.setVisible(false);
+                hmBtn.setVisible(false);
+                kimBtn.setVisible(false);
+                nwBtn.setVisible(true);
+                btmBtn.setVisible(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                kimBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                kimBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        nwBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                DataProcessor.nextWord();
+                wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
+                pronounceLabel.setAnimationText(DataProcessor.getCurrentWord().getPronounce());
+                translationLabel.setAnimationText("*****************");
+                exampleLabel.setAnimationText("******************************");
+                dkBtn.setVisible(true);
+                hmBtn.setVisible(true);
+                kimBtn.setVisible(true);
+                nwBtn.setVisible(false);
+                btmBtn.setVisible(false);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nwBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                nwBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        btmBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                frame.remove(learningPanel);
+                frame.add(modePanel);
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btmBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btmBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+
+
     }
 
 }
