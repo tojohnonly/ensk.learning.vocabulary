@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import javax.swing.*;
 
-public class StudyVocabulary {
+public class Application {
 
     /**
      * Start Learning Vocabulary
@@ -17,8 +17,7 @@ public class StudyVocabulary {
      * @version 1.0.0
      */
     public static void main(String[] args) {
-        JFrame frame = FrameContainer.assembleFrame();
-        frame.setVisible(true);
+        FrameContainer.start();
 
 
         Connection c = null;

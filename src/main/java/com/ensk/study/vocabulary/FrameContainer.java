@@ -26,7 +26,7 @@ public class FrameContainer {
     static JPanel learningPanel = assembleLearningPanel();
 
 
-    public static JFrame assembleFrame() {
+    public static void start() {
         // 主窗体设置大小
         frame.setSize(460, 310);
         // 主窗体设置位置
@@ -43,11 +43,10 @@ public class FrameContainer {
         ImageIcon imageIcon = new ImageIcon("D:\\Software\\Windows\\Themes\\Icons\\Pngs\\meistertask-task-management-2019-05-20.png");
         frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 
-
         frame.add(modePanel);
         // frame.add(learningPanel);
 
-        return frame;
+        frame.setVisible(true);
     }
 
     public static JPanel assembleModePanel() {
