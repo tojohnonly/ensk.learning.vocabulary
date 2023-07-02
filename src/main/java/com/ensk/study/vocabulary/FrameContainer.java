@@ -86,7 +86,7 @@ public class FrameContainer {
 
     public static void start() {
         // 主窗体设置大小
-        frame.setSize(460, 310);
+        frame.setSize(460, 315);
         // 主窗体设置位置
         // f.setLocation(200, 200);
         // 窗口居中
@@ -203,14 +203,14 @@ public class FrameContainer {
         translationLabel.setForeground(Color.WHITE);
 
         // example
-        exampleLabel = new JAnimationLabel("", 8);
-        exampleLabel.setBounds(30, 145, 400, 55);
+        exampleLabel = new JAnimationLabel("", 5);
+        exampleLabel.setBounds(30, 145, 400, 70);
         exampleLabel.setFont(exampleFont);
         exampleLabel.setForeground(Color.WHITE);
 
         // Don't Know Button
         dkBtn = new JRoundedButton("Don't Know");
-        dkBtn.setBounds(30, 215, 110, 35);
+        dkBtn.setBounds(30, 230, 110, 35);
         dkBtn.setForeground(Color.WHITE);
         dkBtn.setFont(buttonFont);
         dkBtn.setBackground(buttonBgColor);
@@ -220,7 +220,7 @@ public class FrameContainer {
 
         // Hazy Memory Button
         hmBtn = new JRoundedButton("Hazy Memory");
-        hmBtn.setBounds(155, 215, 125, 35);
+        hmBtn.setBounds(155, 230, 125, 35);
         hmBtn.setForeground(Color.WHITE);
         hmBtn.setFont(buttonFont);
         hmBtn.setBackground(buttonBgColor);
@@ -230,7 +230,7 @@ public class FrameContainer {
 
         // Keep in Mind Button
         kimBtn = new JRoundedButton("Keep in Mind");
-        kimBtn.setBounds(295, 215, 125, 35);
+        kimBtn.setBounds(295, 230, 125, 35);
         kimBtn.setForeground(Color.WHITE);
         kimBtn.setFont(buttonFont);
         kimBtn.setBackground(buttonBgColor);
@@ -240,7 +240,7 @@ public class FrameContainer {
 
         // Next Word Button
         nwBtn = new JRoundedButton("Next Word");
-        nwBtn.setBounds(60, 215, 200, 35);
+        nwBtn.setBounds(60, 230, 200, 35);
         nwBtn.setForeground(Color.WHITE);
         nwBtn.setFont(buttonFont);
         nwBtn.setBackground(buttonBgColor);
@@ -251,7 +251,7 @@ public class FrameContainer {
 
         // Edit Button
         editBtn = new JRoundedButton("Edit");
-        editBtn.setBounds(270, 215, 50, 35);
+        editBtn.setBounds(270, 230, 50, 35);
         editBtn.setForeground(Color.WHITE);
         editBtn.setFont(buttonFont);
         editBtn.setBackground(buttonBgColor);
@@ -262,7 +262,7 @@ public class FrameContainer {
 
         // Back to Mode Select Button
         btmBtn = new JRoundedButton("Mode");
-        btmBtn.setBounds(330, 215, 60, 35);
+        btmBtn.setBounds(330, 230, 60, 35);
         btmBtn.setForeground(Color.WHITE);
         btmBtn.setFont(buttonFont);
         btmBtn.setBackground(buttonBgColor);
