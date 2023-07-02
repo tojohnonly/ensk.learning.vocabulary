@@ -1,6 +1,5 @@
 package com.ensk.study.vocabulary;
 
-import javax.swing.*;
 import java.sql.*;
 
 public class DataProcessor {
@@ -50,7 +49,7 @@ public class DataProcessor {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
             }
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1");
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 WordEntity word = new WordEntity();
                 word.setId(resultSet.getInt("ID"));
@@ -91,6 +90,16 @@ public class DataProcessor {
 
     public static WordEntity getCurrentWord() {
         return currentWord;
+    }
+
+    public static Boolean checkEqual(String a, String b) {
+        if (null == a && null == b) {
+            return true;
+        } else if (null == a || null == b) {
+            return false;
+        } else {
+            return a.equals(b);
+        }
     }
 
 
