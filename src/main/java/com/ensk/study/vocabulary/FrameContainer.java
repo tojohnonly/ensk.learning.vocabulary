@@ -128,9 +128,15 @@ public class FrameContainer {
         wordLabel.setFont(wordFont);
         wordLabel.setForeground(Color.WHITE);
 
+        // score
+        JAnimationLabel scoreLabel = new JAnimationLabel("", 10);
+        scoreLabel.setBounds(30, 60, 40, 25);
+        scoreLabel.setFont(pronounceFont);
+        scoreLabel.setForeground(Color.WHITE);
+
         // pronounce
         JAnimationLabel pronounceLabel = new JAnimationLabel("", 20);
-        pronounceLabel.setBounds(30, 60, 400, 25);
+        pronounceLabel.setBounds(80, 60, 400, 25);
         pronounceLabel.setFont(pronounceFont);
         pronounceLabel.setForeground(Color.WHITE);
 
@@ -200,6 +206,7 @@ public class FrameContainer {
 
         // Add component to panel
         panel.add(wordLabel);
+        panel.add(scoreLabel);
         panel.add(pronounceLabel);
         panel.add(translationLabel);
         panel.add(exampleLabel);
@@ -212,12 +219,13 @@ public class FrameContainer {
         // Get First Word
         DataProcessor.nextWord();
         wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
+        scoreLabel.setAnimationText(String.format("[%.2f]", DataProcessor.getCurrentWord().getLearnScore()));
         pronounceLabel.setAnimationText(DataProcessor.getCurrentWord().getPronounce());
         translationLabel.setAnimationText("*****************");
         exampleLabel.setAnimationText("******************************");
 
         // Add Mouse Listener
-        registerLearningPanelClickEvent(wordLabel, pronounceLabel, translationLabel, exampleLabel, dkBtn, hmBtn, kimBtn, nwBtn, btmBtn);
+        registerLearningPanelClickEvent(wordLabel, scoreLabel, pronounceLabel, translationLabel, exampleLabel, dkBtn, hmBtn, kimBtn, nwBtn, btmBtn);
 
         return panel;
     }
@@ -227,6 +235,7 @@ public class FrameContainer {
         learningModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                DataProcessor.setMode(1);
                 frame.remove(modePanel);
                 frame.add(learningPanel);
                 frame.validate();
@@ -247,6 +256,7 @@ public class FrameContainer {
         reviewModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                DataProcessor.setMode(2);
                 frame.remove(modePanel);
                 frame.add(learningPanel);
                 frame.validate();
@@ -267,6 +277,7 @@ public class FrameContainer {
         mixedModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                DataProcessor.setMode(3);
                 frame.remove(modePanel);
                 frame.add(learningPanel);
                 frame.validate();
@@ -286,12 +297,12 @@ public class FrameContainer {
 
     }
 
-    public static void registerLearningPanelClickEvent(JAnimationLabel wordLabel, JAnimationLabel pronounceLabel, JAnimationLabel translationLabel, JAnimationLabel exampleLabel,
+    public static void registerLearningPanelClickEvent(JAnimationLabel wordLabel, JAnimationLabel scoreLabel, JAnimationLabel pronounceLabel, JAnimationLabel translationLabel, JAnimationLabel exampleLabel,
                                             JButton dkBtn, JButton hmBtn, JButton kimBtn, JButton nwBtn, JButton btmBtn) {
         dkBtn.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseReleased(MouseEvent e) {
+                DataProcessor.upadteScore(DataProcessor.getCurrentWord().getId(), 1);
                 translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
                 exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
                 dkBtn.setVisible(false);
@@ -315,6 +326,7 @@ public class FrameContainer {
         hmBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                DataProcessor.upadteScore(DataProcessor.getCurrentWord().getId(), 2);
                 translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
                 exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
                 dkBtn.setVisible(false);
@@ -338,6 +350,7 @@ public class FrameContainer {
         kimBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                DataProcessor.upadteScore(DataProcessor.getCurrentWord().getId(), 3);
                 translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
                 exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
                 dkBtn.setVisible(false);
@@ -363,6 +376,7 @@ public class FrameContainer {
             public void mouseReleased(MouseEvent e) {
                 DataProcessor.nextWord();
                 wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
+                scoreLabel.setAnimationText(String.format("[%.2f]", DataProcessor.getCurrentWord().getLearnScore()));
                 pronounceLabel.setAnimationText(DataProcessor.getCurrentWord().getPronounce());
                 translationLabel.setAnimationText("*****************");
                 exampleLabel.setAnimationText("******************************");

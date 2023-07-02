@@ -9,12 +9,13 @@ public class DataProcessor {
     private static Connection connection = null;
     private static Statement statement = null;
     private static WordEntity currentWord;
+    private static Integer studyMode = 3;
 
     static {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\tojoh\\Desktop\\Vocabulary.db3");
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(true);
             System.out.println("Opened database successfully");
             statement = connection.createStatement();
         } catch (Exception e) {
@@ -33,11 +34,23 @@ public class DataProcessor {
         }
     }
 
-
+    protected static void setMode(Integer mode) {
+        studyMode = mode;
+    }
 
     public static void nextWord() {
         try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1;");
+
+            String sql = "";
+            if (studyMode == 1) {
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
+            } else if (studyMode == 2) {
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+            } else if (studyMode == 3) {
+                sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
+            }
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1");
             while (resultSet.next()) {
                 WordEntity word = new WordEntity();
                 word.setId(resultSet.getInt("ID"));
@@ -58,42 +71,27 @@ public class DataProcessor {
         }
     }
 
+    public static void upadteScore(Integer wordId, Integer mode) {
+        String sqlUpdateTimes = "";
+        String sqlUpdateScore = "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = " + wordId;
+        if (mode == 1) {
+            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
+        } else if (mode == 2) {
+            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, HM_TIMES = HM_TIMES + 1 WHERE ID = " + wordId;
+        } else if (mode == 3) {
+            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
+        }
+        try {
+            statement.executeUpdate(sqlUpdateTimes);
+            statement.executeUpdate(sqlUpdateScore);
+        } catch (SQLException e) {
+            System.err.println("Get Next Word Error: " + e.getMessage());
+        }
+    }
 
     public static WordEntity getCurrentWord() {
         return currentWord;
     }
 
-    public static void getNextWord1() {
-        try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM VOCABULARY;");
-            while (resultSet.next()) {
-                Integer id = resultSet.getInt("ID");
-                String word = resultSet.getString("WORD");
-                String pronounce = resultSet.getString("PRONOUNCE");
-                String translation = resultSet.getString("TRANSLATION");
-                String example = resultSet.getString("EXAMPLE");
-                Integer learnTimes = resultSet.getInt("LEARN_TIMES");
-                Integer dnkTimes = resultSet.getInt("DNK_TIMES");
-                Integer hmTimes = resultSet.getInt("HM_TIMES");
-                Integer kimTimes = resultSet.getInt("KIM_TIMES");
-                float learnScore = resultSet.getFloat("LEARN_SCORE");
-                System.out.println("ID = " + id);
-                System.out.println("WORD = " + word);
-                System.out.println("PRONOUNCE = " + pronounce);
-                System.out.println("TRANSLATION = " + translation);
-                System.out.println("EXAMPLE = " + example);
-                System.out.println("LEARN_TIMES = " + learnTimes);
-                System.out.println("DNK_TIMES = " + dnkTimes);
-                System.out.println("HM_TIMES = " + hmTimes);
-                System.out.println("KIM_TIMES = " + kimTimes);
-                System.out.println("LEARN_SCORE = " + learnScore);
-                System.out.println();
-                resultSet.close();
-            }
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-    }
 
 }
