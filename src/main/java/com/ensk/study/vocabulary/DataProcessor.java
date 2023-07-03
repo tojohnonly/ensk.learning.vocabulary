@@ -1,5 +1,6 @@
 package com.ensk.study.vocabulary;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,36 +16,41 @@ public class DataProcessor {
     private static WordEntity currentWord;
     private static Integer studyMode = 3;
 
-    static {
+    protected static Boolean connectDatabase() {
         try {
+            // Check Database File Exists
+            String dbPath = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\VOCABULARY.db";
+            File file = new File(dbPath);
+            if (!file.exists()) {
+                System.err.println("Connect to " + dbPath + ", Database File Not Exists");
+                FrameContainer.noticeAndQuit("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
+                return false;
+            }
+            // Connect Database
             Class.forName("org.sqlite.JDBC");
-            // TODO - ENSK - 待处理 校验数据库文件是否存在
-            connection = DriverManager.getConnection("jdbc:sqlite:" +  FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\VOCABULARY.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             connection.setAutoCommit(true);
             System.out.println("Open Database Successfully");
             statement = connection.createStatement();
+            return true;
         } catch (Exception e) {
             System.err.println("Open Database Error: " + e.getMessage());
-            LogUtil.log("Open Database Error: " + e.getMessage());
-            // TODO - ENSK - 待处理抽出来
-            DataProcessor.closeConnection();
-            LogUtil.closeLog();
-            System.exit(0);
+            FrameContainer.noticeAndQuit("Open Database Error: " + e.getMessage());
         }
+        return false;
     }
 
     protected static void closeConnection() {
         System.out.println("Close Database Connection");
         try {
-            statement.close();
-            connection.close();
+            if (null != statement) {
+                statement.close();
+            }
+            if (null != connection) {
+                connection.close();
+            }
         } catch (SQLException e) {
             System.err.println("Close Database Connection Error: " + e.getMessage());
-            LogUtil.log("Close Database Connection Error: " + e.getMessage());
-            // TODO - ENSK - 待处理抽出来
-            DataProcessor.closeConnection();
-            LogUtil.closeLog();
-            System.exit(0);
         }
     }
 
@@ -58,7 +64,8 @@ public class DataProcessor {
             if (mode == 1) {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
             } else if (mode == 2) {
-                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+                sql =
+                    "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
             } else if (mode == 3) {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
             }
@@ -71,11 +78,7 @@ public class DataProcessor {
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
-            LogUtil.log("Get Next Word Error: " + e.getMessage());
-            // TODO - ENSK - 待处理抽出来
-            DataProcessor.closeConnection();
-            LogUtil.closeLog();
-            System.exit(0);
+            FrameContainer.noticeAndQuit("Get Next Word Error: " + e.getMessage());
         }
         return true;
     }
@@ -86,7 +89,8 @@ public class DataProcessor {
             if (studyMode == 1) {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 2) {
-                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+                sql =
+                    "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 3) {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
             }
@@ -107,43 +111,36 @@ public class DataProcessor {
                 resultSet.close();
                 currentWord = word;
             } else {
-                System.err.println("Get Next Word Error: No Word In Database");
-                LogUtil.log("Get Next Word Error: No Word In Database");
-                // TODO - ENSK - 待处理抽出来
-                DataProcessor.closeConnection();
-                LogUtil.closeLog();
-                System.exit(0);
+                System.err.println("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                FrameContainer.noticeAndQuit("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
-            LogUtil.log("Get Next Word Error: " + e.getMessage());
-            // TODO - ENSK - 待处理抽出来
-            DataProcessor.closeConnection();
-            LogUtil.closeLog();
-            System.exit(0);
+            FrameContainer.noticeAndQuit("Get Next Word Error: " + e.getMessage());
         }
     }
 
     public static void upadteScore(Integer wordId, Integer mode) {
         String sqlUpdateTimes = "";
-        String sqlUpdateScore = "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = " + wordId;
+        String sqlUpdateScore =
+            "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = "
+                + wordId;
         if (mode == 1) {
-            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
+            sqlUpdateTimes =
+                "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
         } else if (mode == 2) {
-            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, HM_TIMES = HM_TIMES + 1 WHERE ID = " + wordId;
+            sqlUpdateTimes =
+                "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, HM_TIMES = HM_TIMES + 1 WHERE ID = " + wordId;
         } else if (mode == 3) {
-            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
+            sqlUpdateTimes =
+                "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
         }
         try {
             statement.executeUpdate(sqlUpdateTimes);
             statement.executeUpdate(sqlUpdateScore);
         } catch (SQLException e) {
             System.err.println("Upadte Score Error: " + e.getMessage());
-            LogUtil.log("Upadte Score Error: " + e.getMessage());
-            // TODO - ENSK - 待处理抽出来
-            DataProcessor.closeConnection();
-            LogUtil.closeLog();
-            System.exit(0);
+            FrameContainer.noticeAndQuit("Upadte Score Error: " + e.getMessage());
         }
     }
 
@@ -189,16 +186,13 @@ public class DataProcessor {
             needUpdate = true;
         }
         if (needUpdate) {
-            String sql = sqlUpdateWord.substring(0, sqlUpdateWord.length() - 2) + " WHERE ID = " + DataProcessor.getCurrentWord().getId();
+            String sql = sqlUpdateWord.substring(0, sqlUpdateWord.length() - 2) + " WHERE ID = "
+                + DataProcessor.getCurrentWord().getId();
             try {
                 statement.executeUpdate(sql);
             } catch (SQLException e) {
                 System.err.println("Update Current Word Error: " + e.getMessage());
-                LogUtil.log("Update Current Word Error: " + e.getMessage());
-                // TODO - ENSK - 待处理抽出来
-                DataProcessor.closeConnection();
-                LogUtil.closeLog();
-                System.exit(0);
+                FrameContainer.noticeAndQuit("Update Current Word Error: " + e.getMessage());
             }
         }
 

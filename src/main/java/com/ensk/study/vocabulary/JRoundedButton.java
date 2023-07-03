@@ -1,6 +1,11 @@
 package com.ensk.study.vocabulary;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.RenderingHints;
 
 import javax.swing.JButton;
 import javax.swing.border.Border;
@@ -14,7 +19,7 @@ public class JRoundedButton extends JButton {
         setBorder(new RoundBorder());
         // 取消原先画矩形的设置
         setContentAreaFilled(false);
-        //会导致按钮没有明显边界
+        // 会导致按钮没有明显边界
         // setBorderPainted(false);
         // 去除文字周围的虚线框
         setFocusPainted(false);
@@ -22,9 +27,9 @@ public class JRoundedButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        //抗锯齿
-        //JDK文档：http://tool.oschina.net/uploads/apidocs/jdk-zh/java/awt/RenderingHints.html
+        Graphics2D g2d = (Graphics2D)g.create();
+        // 抗锯齿
+        // JDK文档：http://tool.oschina.net/uploads/apidocs/jdk-zh/java/awt/RenderingHints.html
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (getModel().isArmed()) {

@@ -86,11 +86,11 @@ public class FrameContainer {
     private static JRoundedButton editCxlBtn;
 
     // Assemble Mode Panel
-    static JPanel modePanel = assembleModePanel();
+    static JPanel modePanel;
     // Assemble Learning Panel
-    static JPanel learningPanel = assembleLearningPanel();
+    static JPanel learningPanel;
     // Assemble Edit Panel
-    static JPanel editPanel = assembleEditPanel();
+    static JPanel editPanel;
 
     public static void start() {
 
@@ -107,21 +107,88 @@ public class FrameContainer {
         // Set Background Color
         frame.getContentPane().setBackground(panelBgColor);
         // Set App Icon
-        // TODO - ENSK - 111111111111111待处理
         ImageIcon imageIcon = new ImageIcon("AppIcon.png");
         frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-        frame.add(modePanel);
         // frame.add(learningPanel);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 DataProcessor.closeConnection();
-                LogUtil.closeLog();
+            }
+        });
+        frame.setVisible(true);
+
+        // Connect Database
+        if (!DataProcessor.connectDatabase()) {
+            return;
+        }
+
+        // Load First Panel
+        modePanel = assembleModePanel();
+        learningPanel = assembleLearningPanel();
+        editPanel = assembleEditPanel();
+        frame.add(modePanel);
+        frame.validate();
+        frame.repaint();
+
+    }
+
+    public static void noticeAndQuit(String message) {
+        if (null != modePanel) {
+            frame.remove(modePanel);
+        }
+        if (null != learningPanel) {
+            frame.remove(learningPanel);
+        }
+        if (null != editPanel) {
+            frame.remove(editPanel);
+        }
+
+        frame.setLayout(null);
+        // Notice Label
+        JAnimationLabel noticeLabel = new JAnimationLabel(message, 10);
+        noticeLabel.setBounds(60, 30, 340, 150);
+        noticeLabel.setFont(translationFont);
+        noticeLabel.setForeground(Color.RED);
+
+        // OK Button
+        JRoundedButton okBtn = new JRoundedButton("OK");
+        okBtn.setBounds(150, 200, 140, 35);
+        okBtn.setForeground(Color.RED);
+        okBtn.setFont(buttonFont);
+        okBtn.setBackground(buttonBgColor);
+        okBtn.setBorder(new RoundBorder());
+        okBtn.setBorderPainted(false);
+        okBtn.setFocusPainted(false);
+        okBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                DataProcessor.closeConnection();
+                System.exit(0);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!okBtn.isEnabled()) {
+                    return;
+                }
+                okBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!okBtn.isEnabled()) {
+                    return;
+                }
+                okBtn.setBackground(new Color(83, 81, 80));
+
             }
         });
 
-        frame.setVisible(true);
-
+        frame.add(noticeLabel);
+        frame.add(okBtn);
+        frame.validate();
+        frame.repaint();
     }
 
     public static JPanel assembleModePanel() {
@@ -134,7 +201,8 @@ public class FrameContainer {
 
         // Summary
         summaryLabel = new JLabel("All Words: 5366, Learned: 2377");
-        //JLabel summaryLabel = new JLabel("<html><body style=\"width:400px;text-align:center\">" + "All Words: 5366   Learned: 2377" + "<body></html>");
+        // JLabel summaryLabel = new JLabel("<html><body style=\"width:400px;text-align:center\">" + "All Words: 5366
+        // Learned: 2377" + "<body></html>");
         summaryLabel.setBounds(80, 20, 250, 35);
         summaryLabel.setFont(buttonFont);
         summaryLabel.setForeground(Color.WHITE);
@@ -350,7 +418,7 @@ public class FrameContainer {
         wordTextField = new JTextField();
         wordTextField.setBounds(140, 30, 230, 30);
         wordTextField.setFont(buttonFont);
-        //wordTextField.setBorder(new LineBorder(new Color(100,100,100), 0, true));
+        // wordTextField.setBorder(new LineBorder(new Color(100,100,100), 0, true));
         wordTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 
         wordTextField.setForeground(Color.WHITE);
@@ -736,7 +804,8 @@ public class FrameContainer {
             @Override
             public void mouseReleased(MouseEvent e) {
 
-                DataProcessor.updateCurrentWord(wordTextField.getText(), pronounceTextField.getText(), translationTextField.getText(), exampleTextField.getText());
+                DataProcessor.updateCurrentWord(wordTextField.getText(), pronounceTextField.getText(),
+                    translationTextField.getText(), exampleTextField.getText());
 
                 wordLabel.setAnimationText(wordTextField.getText());
                 pronounceLabel.setAnimationText(pronounceTextField.getText());
