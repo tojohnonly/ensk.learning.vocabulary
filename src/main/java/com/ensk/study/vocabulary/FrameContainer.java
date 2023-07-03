@@ -93,7 +93,7 @@ public class FrameContainer {
     static JPanel editPanel = assembleEditPanel();
 
     public static void start() {
-        
+
         // Set Main Window Size
         frame.setSize(460, 315);
         // Set Main Window Location
@@ -108,15 +108,15 @@ public class FrameContainer {
         frame.getContentPane().setBackground(panelBgColor);
         // Set App Icon
         // TODO - ENSK - 111111111111111待处理
-        ImageIcon imageIcon = new ImageIcon("D:\\Software\\Windows\\Themes\\Icons\\Pngs\\meistertask-task-management-2019-05-20.png");
+        ImageIcon imageIcon = new ImageIcon("AppIcon.png");
         frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-
         frame.add(modePanel);
         // frame.add(learningPanel);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 DataProcessor.closeConnection();
+                LogUtil.closeLog();
             }
         });
 
@@ -177,6 +177,17 @@ public class FrameContainer {
 
         // Register Mode Panel Click Event
         registerModePanelClickEvent();
+
+        // Check Mode Available
+        if (!DataProcessor.checkModeAvailable(1)) {
+            learningModeBtn.setEnabled(false);
+        }
+        if (!DataProcessor.checkModeAvailable(2)) {
+            reviewModeBtn.setEnabled(false);
+        }
+        if (!DataProcessor.checkModeAvailable(3)) {
+            mixedModeBtn.setEnabled(false);
+        }
 
         return panel;
     }
@@ -307,10 +318,6 @@ public class FrameContainer {
         // 设置背景色
         panel.setBackground(new Color(65, 63, 62));
 
-
-
-
-
         // Word Edit Label
         wordEditLabel = new JLabel("Word:");
         wordEditLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -424,6 +431,9 @@ public class FrameContainer {
         learningModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (!learningModeBtn.isEnabled()) {
+                    return;
+                }
                 DataProcessor.setMode(1);
                 frame.remove(modePanel);
                 frame.add(learningPanel);
@@ -436,6 +446,7 @@ public class FrameContainer {
                 btmBtn.setVisible(false);
 
                 // Get First Word
+                // TODO - ENSK - 待处理 获取不到会报错
                 DataProcessor.nextWord();
                 wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
                 scoreLabel.setAnimationText(String.format("[%.2f]", DataProcessor.getCurrentWord().getLearnScore()));
@@ -449,18 +460,29 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                if (!learningModeBtn.isEnabled()) {
+                    return;
+                }
                 learningModeBtn.setBackground(new Color(98, 96, 95));
+
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+                if (!learningModeBtn.isEnabled()) {
+                    return;
+                }
                 learningModeBtn.setBackground(new Color(83, 81, 80));
+
             }
         });
 
         reviewModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (!reviewModeBtn.isEnabled()) {
+                    return;
+                }
                 DataProcessor.setMode(2);
                 frame.remove(modePanel);
                 frame.add(learningPanel);
@@ -486,11 +508,17 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                if (!reviewModeBtn.isEnabled()) {
+                    return;
+                }
                 reviewModeBtn.setBackground(new Color(98, 96, 95));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+                if (!reviewModeBtn.isEnabled()) {
+                    return;
+                }
                 reviewModeBtn.setBackground(new Color(83, 81, 80));
             }
         });
@@ -708,9 +736,12 @@ public class FrameContainer {
             @Override
             public void mouseReleased(MouseEvent e) {
 
-                // TODO - ENSK - 111111111111111待处理1
-                String word = wordTextField.getText();
                 DataProcessor.updateCurrentWord(wordTextField.getText(), pronounceTextField.getText(), translationTextField.getText(), exampleTextField.getText());
+
+                wordLabel.setAnimationText(wordTextField.getText());
+                pronounceLabel.setAnimationText(pronounceTextField.getText());
+                translationLabel.setAnimationText(translationTextField.getText());
+                exampleLabel.setAnimationText(exampleTextField.getText());
 
                 frame.remove(editPanel);
                 frame.add(learningPanel);

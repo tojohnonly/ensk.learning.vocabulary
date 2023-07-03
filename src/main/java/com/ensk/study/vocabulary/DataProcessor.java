@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 
 public class DataProcessor {
@@ -19,12 +18,17 @@ public class DataProcessor {
     static {
         try {
             Class.forName("org.sqlite.JDBC");
+            // TODO - ENSK - 待处理 校验数据库文件是否存在
             connection = DriverManager.getConnection("jdbc:sqlite:" +  FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\VOCABULARY.db");
             connection.setAutoCommit(true);
-            System.out.println("Opened database successfully");
+            System.out.println("Open Database Successfully");
             statement = connection.createStatement();
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.err.println("Open Database Error: " + e.getMessage());
+            LogUtil.log("Open Database Error: " + e.getMessage());
+            // TODO - ENSK - 待处理抽出来
+            DataProcessor.closeConnection();
+            LogUtil.closeLog();
             System.exit(0);
         }
     }
@@ -36,6 +40,11 @@ public class DataProcessor {
             connection.close();
         } catch (SQLException e) {
             System.err.println("Close Database Connection Error: " + e.getMessage());
+            LogUtil.log("Close Database Connection Error: " + e.getMessage());
+            // TODO - ENSK - 待处理抽出来
+            DataProcessor.closeConnection();
+            LogUtil.closeLog();
+            System.exit(0);
         }
     }
 
@@ -43,9 +52,36 @@ public class DataProcessor {
         studyMode = mode;
     }
 
+    protected static Boolean checkModeAvailable(Integer mode) {
+        try {
+            String sql = "";
+            if (mode == 1) {
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
+            } else if (mode == 2) {
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+            } else if (mode == 3) {
+                sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
+            }
+
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Get Next Word Error: " + e.getMessage());
+            LogUtil.log("Get Next Word Error: " + e.getMessage());
+            // TODO - ENSK - 待处理抽出来
+            DataProcessor.closeConnection();
+            LogUtil.closeLog();
+            System.exit(0);
+        }
+        return true;
+    }
+
     public static void nextWord() {
         try {
-
             String sql = "";
             if (studyMode == 1) {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
@@ -56,7 +92,7 @@ public class DataProcessor {
             }
 
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 WordEntity word = new WordEntity();
                 word.setId(resultSet.getInt("ID"));
                 word.setWord(resultSet.getString("WORD"));
@@ -70,9 +106,21 @@ public class DataProcessor {
                 word.setLearnScore(resultSet.getFloat("LEARN_SCORE"));
                 resultSet.close();
                 currentWord = word;
+            } else {
+                System.err.println("Get Next Word Error: No Word In Database");
+                LogUtil.log("Get Next Word Error: No Word In Database");
+                // TODO - ENSK - 待处理抽出来
+                DataProcessor.closeConnection();
+                LogUtil.closeLog();
+                System.exit(0);
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
+            LogUtil.log("Get Next Word Error: " + e.getMessage());
+            // TODO - ENSK - 待处理抽出来
+            DataProcessor.closeConnection();
+            LogUtil.closeLog();
+            System.exit(0);
         }
     }
 
@@ -90,7 +138,12 @@ public class DataProcessor {
             statement.executeUpdate(sqlUpdateTimes);
             statement.executeUpdate(sqlUpdateScore);
         } catch (SQLException e) {
-            System.err.println("Get Next Word Error: " + e.getMessage());
+            System.err.println("Upadte Score Error: " + e.getMessage());
+            LogUtil.log("Upadte Score Error: " + e.getMessage());
+            // TODO - ENSK - 待处理抽出来
+            DataProcessor.closeConnection();
+            LogUtil.closeLog();
+            System.exit(0);
         }
     }
 
@@ -112,22 +165,27 @@ public class DataProcessor {
         StringBuilder sqlUpdateWord = new StringBuilder("UPDATE VOCABULARY SET ");
         Boolean needUpdate = false;
         if (!DataProcessor.checkEqual(word, DataProcessor.getCurrentWord().getWord())) {
-            sqlUpdateWord.append("WORD = " + word + ", ");
+            sqlUpdateWord.append("WORD = '" + word.replace("'", "''") + "', ");
             needUpdate = true;
         }
         if (!DataProcessor.checkEqual(pronounce, DataProcessor.getCurrentWord().getPronounce())) {
-            sqlUpdateWord.append("PRONOUNCE = " + pronounce + ", ");
+            if (null == example || example.equals("")) {
+                sqlUpdateWord.append("PRONOUNCE = NULL, ");
+            } else {
+                sqlUpdateWord.append("PRONOUNCE = '" + pronounce.replace("'", "''") + "', ");
+            }
             needUpdate = true;
         }
         if (!DataProcessor.checkEqual(translation, DataProcessor.getCurrentWord().getTranslation())) {
-            sqlUpdateWord.append("TRANSLATION = " + translation + ", ");
+            sqlUpdateWord.append("TRANSLATION = '" + translation.replace("'", "''") + "', ");
             needUpdate = true;
         }
         if (!DataProcessor.checkEqual(example, DataProcessor.getCurrentWord().getExample())) {
             if (null == example || example.equals("")) {
-                example = "NULL";
+                sqlUpdateWord.append("EXAMPLE = NULL, ");
+            } else {
+                sqlUpdateWord.append("EXAMPLE = '" + example.replace("'", "''") + "', ");
             }
-            sqlUpdateWord.append("EXAMPLE = " + example + ", ");
             needUpdate = true;
         }
         if (needUpdate) {
@@ -135,8 +193,12 @@ public class DataProcessor {
             try {
                 statement.executeUpdate(sql);
             } catch (SQLException e) {
-                System.err.println("Get Next Word Error: " + e.getMessage());
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+                System.err.println("Update Current Word Error: " + e.getMessage());
+                LogUtil.log("Update Current Word Error: " + e.getMessage());
+                // TODO - ENSK - 待处理抽出来
+                DataProcessor.closeConnection();
+                LogUtil.closeLog();
+                System.exit(0);
             }
         }
 
