@@ -1,30 +1,38 @@
 package com.ensk.study.vocabulary;
 
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 public class FrameContainer {
 
-    // 各种字体
+    // Font
     static Font wordFont = new Font("Microsoft YaHei UI", Font.PLAIN, 25);
     static Font pronounceFont = new Font(Font.SERIF, Font.PLAIN, 17);
     static Font translationFont = new Font("霞鹜文楷", Font.PLAIN, 19);
     static Font exampleFont = new Font("霞鹜文楷", Font.PLAIN, 15);
     static Font buttonFont = new Font("Microsoft YaHei UI", Font.PLAIN, 15);
 
-    // 颜色
+    // Color
     static Color panelBgColor = new Color(65, 63, 62);
     static Color buttonBgColor = new Color(83, 81, 80);
 
-    // 主Frame
+    // Main Frame
     static final JFrame frame = new JFrame("Learning");
 
-    // Summary
+    // Summary Label
     private static JLabel summaryLabel;
     // Start Learning New Words Button
     private static JRoundedButton learningModeBtn;
@@ -33,15 +41,15 @@ public class FrameContainer {
     // Mixed Mode Button
     private static JRoundedButton mixedModeBtn;
 
-    // word
+    // Word Label
     private static JAnimationLabel wordLabel;
-    // score
+    // Score Label
     private static JAnimationLabel scoreLabel;
-    // pronounce
+    // Pronounce Label
     private static JAnimationLabel pronounceLabel;
-    // translation
+    // translation Label
     private static JAnimationLabel translationLabel;
-    // example
+    // Example Label
     private static JAnimationLabel exampleLabel;
     // Don't Know Button
     private static JRoundedButton dkBtn;
@@ -77,27 +85,29 @@ public class FrameContainer {
     // Edit Cancel Button
     private static JRoundedButton editCxlBtn;
 
-    // 组装模式面板
+    // Assemble Mode Panel
     static JPanel modePanel = assembleModePanel();
-    // 组装学习面板
+    // Assemble Learning Panel
     static JPanel learningPanel = assembleLearningPanel();
-    // 组装学习面板
+    // Assemble Edit Panel
     static JPanel editPanel = assembleEditPanel();
 
     public static void start() {
-        // 主窗体设置大小
+        
+        // Set Main Window Size
         frame.setSize(460, 315);
-        // 主窗体设置位置
+        // Set Main Window Location
         // f.setLocation(200, 200);
-        // 窗口居中
+        // Center the Main Window
         frame.setLocationRelativeTo(null);
-        // 窗体大小不可变化
+        // Set Main Window Size Unchangeable
         frame.setResizable(false);
-        // 关闭窗体的时候，退出程序
+        // Set Default Close Operation
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // 设置背景色
+        // Set Background Color
         frame.getContentPane().setBackground(panelBgColor);
         // Set App Icon
+        // TODO - ENSK - 111111111111111待处理
         ImageIcon imageIcon = new ImageIcon("D:\\Software\\Windows\\Themes\\Icons\\Pngs\\meistertask-task-management-2019-05-20.png");
         frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 
@@ -117,7 +127,7 @@ public class FrameContainer {
     public static JPanel assembleModePanel() {
 
         JPanel panel = new JPanel();
-        // 组件设置为绝对定位
+        // Component Absolute Positioning
         panel.setLayout(null);
         // Background Color
         panel.setBackground(panelBgColor);
@@ -173,9 +183,9 @@ public class FrameContainer {
 
     public static JPanel assembleLearningPanel() {
         JPanel panel = new JPanel();
-        // 组件设置为绝对定位
+        // Component Absolute Positioning
         panel.setLayout(null);
-        // 设置背景色
+        // Set Background Color
         panel.setBackground(new Color(65, 63, 62));
 
         // word
@@ -698,17 +708,9 @@ public class FrameContainer {
             @Override
             public void mouseReleased(MouseEvent e) {
 
-                // TODO : registerEditPanelClickEvent
+                // TODO - ENSK - 111111111111111待处理1
                 String word = wordTextField.getText();
-                String pronounce = pronounceTextField.getText();
-                String translation = translationTextField.getText();
-                String example = exampleTextField.getText();
-
-                if (DataProcessor.checkEqual(word, DataProcessor.getCurrentWord().getWord())) {
-
-                }
-
-                JOptionPane.showMessageDialog(editPanel, word, "Warning", JOptionPane.WARNING_MESSAGE);
+                DataProcessor.updateCurrentWord(wordTextField.getText(), pronounceTextField.getText(), translationTextField.getText(), exampleTextField.getText());
 
                 frame.remove(editPanel);
                 frame.add(learningPanel);

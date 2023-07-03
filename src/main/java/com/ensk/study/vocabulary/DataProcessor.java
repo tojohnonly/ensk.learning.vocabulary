@@ -1,9 +1,15 @@
 package com.ensk.study.vocabulary;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileSystemView;
 
 public class DataProcessor {
-
 
     private static Connection connection = null;
     private static Statement statement = null;
@@ -13,7 +19,7 @@ public class DataProcessor {
     static {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\tojoh\\Desktop\\Vocabulary.db3");
+            connection = DriverManager.getConnection("jdbc:sqlite:" +  FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\VOCABULARY.db");
             connection.setAutoCommit(true);
             System.out.println("Opened database successfully");
             statement = connection.createStatement();
@@ -102,5 +108,38 @@ public class DataProcessor {
         }
     }
 
+    public static void updateCurrentWord(String word, String pronounce, String translation, String example) {
+        StringBuilder sqlUpdateWord = new StringBuilder("UPDATE VOCABULARY SET ");
+        Boolean needUpdate = false;
+        if (!DataProcessor.checkEqual(word, DataProcessor.getCurrentWord().getWord())) {
+            sqlUpdateWord.append("WORD = " + word + ", ");
+            needUpdate = true;
+        }
+        if (!DataProcessor.checkEqual(pronounce, DataProcessor.getCurrentWord().getPronounce())) {
+            sqlUpdateWord.append("PRONOUNCE = " + pronounce + ", ");
+            needUpdate = true;
+        }
+        if (!DataProcessor.checkEqual(translation, DataProcessor.getCurrentWord().getTranslation())) {
+            sqlUpdateWord.append("TRANSLATION = " + translation + ", ");
+            needUpdate = true;
+        }
+        if (!DataProcessor.checkEqual(example, DataProcessor.getCurrentWord().getExample())) {
+            if (null == example || example.equals("")) {
+                example = "NULL";
+            }
+            sqlUpdateWord.append("EXAMPLE = " + example + ", ");
+            needUpdate = true;
+        }
+        if (needUpdate) {
+            String sql = sqlUpdateWord.substring(0, sqlUpdateWord.length() - 2) + " WHERE ID = " + DataProcessor.getCurrentWord().getId();
+            try {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                System.err.println("Get Next Word Error: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+    }
 
 }
