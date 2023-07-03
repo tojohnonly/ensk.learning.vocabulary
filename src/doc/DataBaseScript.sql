@@ -12,11 +12,12 @@ CREATE TABLE VOCABULARY (
     UNIQUE (WORD)
 );
 
+
+
 INSERT INTO VOCABULARY (WORD, PRONOUNCE, TRANSLATION) VALUES
 ('Croatia','kro''eʃjɚ','n. 克罗地亚'),
 ('Juventus','ju''vɛntus','n. 尤文图斯'),
 ('Belgium','''bɛldʒəm','n. 比利时');
-
 
 
 

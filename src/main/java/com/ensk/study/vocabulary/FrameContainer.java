@@ -721,6 +721,7 @@ public class FrameContainer {
                 if (!addWordBtn.isEnabled()) {
                     return;
                 }
+                addWordBtn.setBackground(new Color(83, 81, 80));
                 frame.remove(modePanel);
                 frame.add(addPanel);
                 frame.validate();
