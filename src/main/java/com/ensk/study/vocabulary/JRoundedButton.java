@@ -28,8 +28,7 @@ public class JRoundedButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D)g.create();
-        // 抗锯齿
-        // JDK文档：http://tool.oschina.net/uploads/apidocs/jdk-zh/java/awt/RenderingHints.html
+        // 抗锯齿，JDK文档：http://tool.oschina.net/uploads/apidocs/jdk-zh/java/awt/RenderingHints.html
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (getModel().isArmed()) {
@@ -41,7 +40,6 @@ public class JRoundedButton extends JButton {
         }
         // 填充圆角矩形边界
         g2d.fillRoundRect(0, 0, getSize().width - 1, getSize().height - 1, 10, 10);
-
         // 这个调用会画一个标签和焦点矩形
         super.paintComponent(g);
     }

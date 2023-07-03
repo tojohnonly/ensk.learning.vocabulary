@@ -64,8 +64,7 @@ public class DataProcessor {
             if (mode == 1) {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
             } else if (mode == 2) {
-                sql =
-                    "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
             } else if (mode == 3) {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
             }
@@ -89,8 +88,7 @@ public class DataProcessor {
             if (studyMode == 1) {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 2) {
-                sql =
-                    "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 3) {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
             }
@@ -123,8 +121,7 @@ public class DataProcessor {
     public static void upadteScore(Integer wordId, Integer mode) {
         String sqlUpdateTimes = "";
         String sqlUpdateScore =
-            "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = "
-                + wordId;
+            "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = " + wordId;
         if (mode == 1) {
             sqlUpdateTimes =
                 "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
@@ -158,14 +155,59 @@ public class DataProcessor {
         }
     }
 
+    public static Integer getWordCount(Integer studyStage) {
+        try {
+            String sql = "";
+            if (studyStage == 0) {
+                sql = "SELECT COUNT(*) AS WORD_COUNT FROM VOCABULARY";
+            } else if (studyStage == 1) {
+                sql = "SELECT COUNT(*) AS WORD_COUNT FROM VOCABULARY WHERE LEARN_SCORE <= 0";
+            } else if (studyStage == 2) {
+                sql = "SELECT COUNT(*) AS WORD_COUNT FROM VOCABULARY WHERE LEARN_SCORE > 0 AND LEARN_SCORE <= 0.3";
+            } else if (studyStage == 3) {
+                sql = "SELECT COUNT(*) AS WORD_COUNT FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE <= 0.8";
+            } else if (studyStage == 4) {
+                sql = "SELECT COUNT(*) AS WORD_COUNT FROM VOCABULARY WHERE LEARN_SCORE > 0.8";
+            }
+
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                Integer wordCount = resultSet.getInt("WORD_COUNT");
+                resultSet.close();
+                return wordCount;
+            } else {
+                System.err.println("Get Word Count Error, No Eligible Word of This Mode In Database");
+                FrameContainer.noticeAndQuit("Get Word Count Error, No Eligible Word of This Mode In Database");
+            }
+        } catch (SQLException e) {
+            System.err.println("Get Word Count Error: " + e.getMessage());
+            FrameContainer.noticeAndQuit("Get Word Count Error: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public static void addWord(String word, String pronounce, String translation, String example) {
+        String sqlAddWord = "INSERT INTO VOCABULARY (WORD, PRONOUNCE, TRANSLATION, EXAMPLE) VALUES ('" + word + "', "
+            + ((null == pronounce || pronounce.equals("")) ? "NULL, '" : ("'" + pronounce + "', '")) + translation
+            + "', " + ((null == example || example.equals("")) ? "NULL);" : ("'" + example + "');"));
+            try {
+                statement.executeUpdate(sqlAddWord);
+            } catch (SQLException e) {
+                System.err.println("Add Word Error: " + e.getMessage());
+                FrameContainer.noticeAndQuit("Add Word Error: " + e.getMessage());
+            }
+    }
+
     public static void updateCurrentWord(String word, String pronounce, String translation, String example) {
         StringBuilder sqlUpdateWord = new StringBuilder("UPDATE VOCABULARY SET ");
         Boolean needUpdate = false;
         if (!DataProcessor.checkEqual(word, DataProcessor.getCurrentWord().getWord())) {
+            DataProcessor.getCurrentWord().setWord(word);
             sqlUpdateWord.append("WORD = '" + word.replace("'", "''") + "', ");
             needUpdate = true;
         }
         if (!DataProcessor.checkEqual(pronounce, DataProcessor.getCurrentWord().getPronounce())) {
+            DataProcessor.getCurrentWord().setPronounce(pronounce);
             if (null == example || example.equals("")) {
                 sqlUpdateWord.append("PRONOUNCE = NULL, ");
             } else {
@@ -174,10 +216,12 @@ public class DataProcessor {
             needUpdate = true;
         }
         if (!DataProcessor.checkEqual(translation, DataProcessor.getCurrentWord().getTranslation())) {
+            DataProcessor.getCurrentWord().setTranslation(translation);
             sqlUpdateWord.append("TRANSLATION = '" + translation.replace("'", "''") + "', ");
             needUpdate = true;
         }
         if (!DataProcessor.checkEqual(example, DataProcessor.getCurrentWord().getExample())) {
+            DataProcessor.getCurrentWord().setExample(example);
             if (null == example || example.equals("")) {
                 sqlUpdateWord.append("EXAMPLE = NULL, ");
             } else {
@@ -195,7 +239,6 @@ public class DataProcessor {
                 FrameContainer.noticeAndQuit("Update Current Word Error: " + e.getMessage());
             }
         }
-
     }
 
 }

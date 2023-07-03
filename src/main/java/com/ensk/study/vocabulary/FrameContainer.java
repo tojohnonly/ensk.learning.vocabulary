@@ -33,13 +33,38 @@ public class FrameContainer {
     static final JFrame frame = new JFrame("Learning");
 
     // Summary Label
-    private static JLabel summaryLabel;
+    private static JAnimationLabel summaryLabel;
+    // Add Word Button
+    private static JRoundedButton addWordBtn;
     // Start Learning New Words Button
     private static JRoundedButton learningModeBtn;
     // Review Learned Content Button
     private static JRoundedButton reviewModeBtn;
     // Mixed Mode Button
     private static JRoundedButton mixedModeBtn;
+
+    // Word Add Label
+    private static JLabel wordAddLabel;
+    // Word Add Field
+    private static JTextField wordAddTextField;
+    // Pronounce Add Label
+    private static JLabel pronounceAddLabel;
+    // Pronounce Add Field
+    private static JTextField pronounceAddTextField;
+    // Translation Add Label
+    private static JLabel translationAddLabel;
+    // Translation Add Text Field
+    private static JTextField translationAddTextField;
+    // Example Add Label
+    private static JLabel exampleAddLabel;
+    // Example Add Text Field
+    private static JTextField exampleAddTextField;
+    // Add Notice Label
+    private static JAnimationLabel addNoticeLabel;
+    // Add Confirm Button
+    private static JRoundedButton addCfmBtn;
+    // Add Cancel Button
+    private static JRoundedButton addCxlBtn;
 
     // Word Label
     private static JAnimationLabel wordLabel;
@@ -66,20 +91,22 @@ public class FrameContainer {
 
     // Word Edit Label
     private static JLabel wordEditLabel;
-    // Word Text Field
-    private static JTextField wordTextField;
+    // Word Edit Text Field
+    private static JTextField wordEditTextField;
     // Pronounce Edit Label
     private static JLabel pronounceEditLabel;
-    // Pronounce Text Field
-    private static JTextField pronounceTextField;
+    // Pronounce Edit Text Field
+    private static JTextField pronounceEditTextField;
     // Translation Edit Label
     private static JLabel translationEditLabel;
-    // Translation Text Field
-    private static JTextField translationTextField;
+    // Translation Edit Text Field
+    private static JTextField translationEditTextField;
     // Example Edit Label
     private static JLabel exampleEditLabel;
-    // Example Text Field
-    private static JTextField exampleTextField;
+    // Example Edit Text Field
+    private static JTextField exampleEditTextField;
+    // Edit Notice Label
+    private static JAnimationLabel editNoticeLabel;
     // Edit Confirm Button
     private static JRoundedButton editCfmBtn;
     // Edit Cancel Button
@@ -87,8 +114,10 @@ public class FrameContainer {
 
     // Assemble Mode Panel
     static JPanel modePanel;
-    // Assemble Learning Panel
-    static JPanel learningPanel;
+    // Assemble Add Panel
+    static JPanel addPanel;
+    // Assemble Study Panel
+    static JPanel studyPanel;
     // Assemble Edit Panel
     static JPanel editPanel;
 
@@ -109,7 +138,7 @@ public class FrameContainer {
         // Set App Icon
         ImageIcon imageIcon = new ImageIcon("AppIcon.png");
         frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-        // frame.add(learningPanel);
+        // frame.add(studyPanel);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -125,20 +154,23 @@ public class FrameContainer {
 
         // Load First Panel
         modePanel = assembleModePanel();
-        learningPanel = assembleLearningPanel();
+        addPanel = assembleAddPanel();
+        studyPanel = assembleStudyPanel();
         editPanel = assembleEditPanel();
         frame.add(modePanel);
         frame.validate();
         frame.repaint();
-
     }
 
     public static void noticeAndQuit(String message) {
         if (null != modePanel) {
             frame.remove(modePanel);
         }
-        if (null != learningPanel) {
-            frame.remove(learningPanel);
+        if (null != addPanel) {
+            frame.remove(addPanel);
+        }
+        if (null != studyPanel) {
+            frame.remove(studyPanel);
         }
         if (null != editPanel) {
             frame.remove(editPanel);
@@ -181,7 +213,6 @@ public class FrameContainer {
                     return;
                 }
                 okBtn.setBackground(new Color(83, 81, 80));
-
             }
         });
 
@@ -191,6 +222,14 @@ public class FrameContainer {
         frame.repaint();
     }
 
+    /**
+     * Assemble Mode Panel
+     * <p>
+     *
+     * @author tojohnonly
+     * @date 2023/07/02 12:51
+     * @version 1.0.0
+     */
     public static JPanel assembleModePanel() {
 
         JPanel panel = new JPanel();
@@ -199,17 +238,32 @@ public class FrameContainer {
         // Background Color
         panel.setBackground(panelBgColor);
 
+        Integer allWordCount = DataProcessor.getWordCount(0);
+        Integer unstudiedWordCount = DataProcessor.getWordCount(1);
+        Integer masteredWordCount = DataProcessor.getWordCount(4);
+
         // Summary
-        summaryLabel = new JLabel("All Words: 5366, Learned: 2377");
+        summaryLabel = new JAnimationLabel("All Words:&nbsp;&nbsp;&nbsp;" + allWordCount
+                + "<br/>Unstudied:&nbsp;&nbsp;" + unstudiedWordCount + "<br/>Mastered:&nbsp;&nbsp;&nbsp;" + masteredWordCount, 10);
         // JLabel summaryLabel = new JLabel("<html><body style=\"width:400px;text-align:center\">" + "All Words: 5366
         // Learned: 2377" + "<body></html>");
-        summaryLabel.setBounds(80, 20, 250, 35);
+        summaryLabel.setBounds(80, 20, 150, 60);
         summaryLabel.setFont(buttonFont);
         summaryLabel.setForeground(Color.WHITE);
 
         // Start Learning New Words Button
+        addWordBtn = new JRoundedButton("Add Word");
+        addWordBtn.setBounds(250, 20, 115, 60);
+        addWordBtn.setForeground(Color.WHITE);
+        addWordBtn.setFont(buttonFont);
+        addWordBtn.setBackground(buttonBgColor);
+        addWordBtn.setBorder(new RoundBorder());
+        addWordBtn.setBorderPainted(false);
+        addWordBtn.setFocusPainted(false);
+
+        // Start Learning New Words Button
         learningModeBtn = new JRoundedButton("Start Learning New Words");
-        learningModeBtn.setBounds(80, 110, 215, 35);
+        learningModeBtn.setBounds(80, 110, 285, 35);
         learningModeBtn.setForeground(Color.WHITE);
         learningModeBtn.setFont(buttonFont);
         learningModeBtn.setBackground(buttonBgColor);
@@ -219,7 +273,7 @@ public class FrameContainer {
 
         // Review Learned Content Button
         reviewModeBtn = new JRoundedButton("Review Learned Content");
-        reviewModeBtn.setBounds(80, 160, 200, 35);
+        reviewModeBtn.setBounds(80, 160, 285, 35);
         reviewModeBtn.setForeground(Color.WHITE);
         reviewModeBtn.setFont(buttonFont);
         reviewModeBtn.setBackground(buttonBgColor);
@@ -229,7 +283,7 @@ public class FrameContainer {
 
         // Mixed Mode Button
         mixedModeBtn = new JRoundedButton("Mixed Mode");
-        mixedModeBtn.setBounds(80, 210, 120, 35);
+        mixedModeBtn.setBounds(80, 210, 285, 35);
         mixedModeBtn.setForeground(Color.WHITE);
         mixedModeBtn.setFont(buttonFont);
         mixedModeBtn.setBackground(buttonBgColor);
@@ -239,6 +293,7 @@ public class FrameContainer {
 
         // Add component to panel
         panel.add(summaryLabel);
+        panel.add(addWordBtn);
         panel.add(learningModeBtn);
         panel.add(reviewModeBtn);
         panel.add(mixedModeBtn);
@@ -260,7 +315,156 @@ public class FrameContainer {
         return panel;
     }
 
-    public static JPanel assembleLearningPanel() {
+    /**
+     * Refresh Mode Panel
+     * <p>
+     *
+     * @author tojohnonly
+     * @date 2023/07/02 12:51
+     * @version 1.0.0
+     */
+    public static void refreshModePanel() {
+        // Summary
+        Integer allWordCount = DataProcessor.getWordCount(0);
+        Integer unstudiedWordCount = DataProcessor.getWordCount(1);
+        Integer masteredWordCount = DataProcessor.getWordCount(4);
+        summaryLabel.setAnimationText("All Words:&nbsp;&nbsp;&nbsp;" + allWordCount
+                + "<br/>Unstudied:&nbsp;&nbsp;" + unstudiedWordCount + "<br/>Mastered:&nbsp;&nbsp;&nbsp;" + masteredWordCount);
+
+        // Check Mode Available
+        if (!DataProcessor.checkModeAvailable(1)) {
+            learningModeBtn.setEnabled(false);
+        }
+        if (!DataProcessor.checkModeAvailable(2)) {
+            reviewModeBtn.setEnabled(false);
+        }
+        if (!DataProcessor.checkModeAvailable(3)) {
+            mixedModeBtn.setEnabled(false);
+        }
+    }
+
+    /**
+     * Assemble Edit Panel
+     * <p>
+     *
+     * @author tojohnonly
+     * @date 2023/07/02 12:51
+     * @version 1.0.0
+     */
+    public static JPanel assembleAddPanel() {
+        JPanel panel = new JPanel();
+        // 组件设置为绝对定位
+        panel.setLayout(null);
+        // 设置背景色
+        panel.setBackground(new Color(65, 63, 62));
+
+        // Word Add Label
+        wordAddLabel = new JLabel("Word:");
+        wordAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        wordAddLabel.setBounds(40, 30, 90, 30);
+        wordAddLabel.setFont(buttonFont);
+        wordAddLabel.setForeground(Color.WHITE);
+
+        // Pronounce Add Label
+        pronounceAddLabel = new JLabel("Pronounce:");
+        pronounceAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        pronounceAddLabel.setBounds(40, 70, 90, 30);
+        pronounceAddLabel.setFont(buttonFont);
+        pronounceAddLabel.setForeground(Color.WHITE);
+
+        // Translation Add Label
+        translationAddLabel = new JLabel("Translation:");
+        translationAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        translationAddLabel.setBounds(40, 110, 90, 30);
+        translationAddLabel.setFont(buttonFont);
+        translationAddLabel.setForeground(Color.WHITE);
+
+        // Example Add Label
+        exampleAddLabel = new JLabel("Example:");
+        exampleAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        exampleAddLabel.setBounds(40, 150, 90, 30);
+        exampleAddLabel.setFont(buttonFont);
+        exampleAddLabel.setForeground(Color.WHITE);
+
+        // Word Add Text Field
+        wordAddTextField = new JTextField();
+        wordAddTextField.setBounds(140, 30, 230, 30);
+        wordAddTextField.setFont(buttonFont);
+        wordAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        wordAddTextField.setForeground(Color.WHITE);
+        wordAddTextField.setBackground(buttonBgColor);
+
+        // Pronounce Add Text Field
+        pronounceAddTextField = new JTextField();
+        pronounceAddTextField.setBounds(140, 70, 230, 30);
+        pronounceAddTextField.setFont(pronounceFont);
+        pronounceAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        pronounceAddTextField.setForeground(Color.WHITE);
+        pronounceAddTextField.setBackground(buttonBgColor);
+
+        // Translation Add Text Field
+        translationAddTextField = new JTextField();
+        translationAddTextField.setBounds(140, 110, 230, 30);
+        translationAddTextField.setFont(buttonFont);
+        translationAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        translationAddTextField.setForeground(Color.WHITE);
+        translationAddTextField.setBackground(buttonBgColor);
+
+        // Example Add Text Field
+        exampleAddTextField = new JTextField();
+        exampleAddTextField.setBounds(140, 150, 230, 30);
+        exampleAddTextField.setFont(buttonFont);
+        exampleAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        exampleAddTextField.setForeground(Color.WHITE);
+        exampleAddTextField.setBackground(buttonBgColor);
+
+        // Add Notice Label
+        addNoticeLabel = new JAnimationLabel("", 15);
+        addNoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        addNoticeLabel.setBounds(60, 190, 300, 15);
+        addNoticeLabel.setFont(exampleFont);
+        addNoticeLabel.setForeground(Color.RED);
+
+        // Add Confirm Button
+        addCfmBtn = new JRoundedButton("Add");
+        addCfmBtn.setBounds(100, 215, 100, 35);
+        addCfmBtn.setForeground(Color.WHITE);
+        addCfmBtn.setFont(buttonFont);
+        addCfmBtn.setBackground(buttonBgColor);
+        addCfmBtn.setBorder(new RoundBorder());
+        addCfmBtn.setBorderPainted(false);
+        addCfmBtn.setFocusPainted(false);
+
+        // Add Cancel Button
+        addCxlBtn = new JRoundedButton("Cancel");
+        addCxlBtn.setBounds(240, 215, 100, 35);
+        addCxlBtn.setForeground(Color.WHITE);
+        addCxlBtn.setFont(buttonFont);
+        addCxlBtn.setBackground(buttonBgColor);
+        addCxlBtn.setBorder(new RoundBorder());
+        addCxlBtn.setBorderPainted(false);
+        addCxlBtn.setFocusPainted(false);
+
+        // Add component to panel
+        panel.add(wordAddLabel);
+        panel.add(pronounceAddLabel);
+        panel.add(translationAddLabel);
+        panel.add(exampleAddLabel);
+        panel.add(wordAddTextField);
+        panel.add(pronounceAddTextField);
+        panel.add(translationAddTextField);
+        panel.add(exampleAddTextField);
+        panel.add(addNoticeLabel);
+        panel.add(addCfmBtn);
+        panel.add(addCxlBtn);
+
+        // Add Mouse Listener
+        registerAddPanelClickEvent();
+
+        return panel;
+    }
+
+    public static JPanel assembleStudyPanel() {
         JPanel panel = new JPanel();
         // Component Absolute Positioning
         panel.setLayout(null);
@@ -374,11 +578,19 @@ public class FrameContainer {
         panel.add(btmBtn);
 
         // Add Mouse Listener
-        registerLearningPanelClickEvent();
+        registerStudyPanelClickEvent();
 
         return panel;
     }
 
+    /**
+     * Assemble Edit Panel
+     * <p>
+     *
+     * @author tojohnonly
+     * @date 2023/07/02 12:51
+     * @version 1.0.0
+     */
     public static JPanel assembleEditPanel() {
         JPanel panel = new JPanel();
         // 组件设置为绝对定位
@@ -414,39 +626,45 @@ public class FrameContainer {
         exampleEditLabel.setFont(buttonFont);
         exampleEditLabel.setForeground(Color.WHITE);
 
-        // Word Text Field
-        wordTextField = new JTextField();
-        wordTextField.setBounds(140, 30, 230, 30);
-        wordTextField.setFont(buttonFont);
+        // Word Edit Text Field
+        wordEditTextField = new JTextField();
+        wordEditTextField.setBounds(140, 30, 230, 30);
+        wordEditTextField.setFont(buttonFont);
         // wordTextField.setBorder(new LineBorder(new Color(100,100,100), 0, true));
-        wordTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        wordEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        wordEditTextField.setForeground(Color.WHITE);
+        wordEditTextField.setBackground(buttonBgColor);
 
-        wordTextField.setForeground(Color.WHITE);
-        wordTextField.setBackground(buttonBgColor);
+        // Pronounce Edit Text Field
+        pronounceEditTextField = new JTextField();
+        pronounceEditTextField.setBounds(140, 70, 230, 30);
+        pronounceEditTextField.setFont(pronounceFont);
+        pronounceEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        pronounceEditTextField.setForeground(Color.WHITE);
+        pronounceEditTextField.setBackground(buttonBgColor);
 
-        // Pronounce Text Field
-        pronounceTextField = new JTextField();
-        pronounceTextField.setBounds(140, 70, 230, 30);
-        pronounceTextField.setFont(pronounceFont);
-        pronounceTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-        pronounceTextField.setForeground(Color.WHITE);
-        pronounceTextField.setBackground(buttonBgColor);
+        // Translation Edit Text Field
+        translationEditTextField = new JTextField();
+        translationEditTextField.setBounds(140, 110, 230, 30);
+        translationEditTextField.setFont(buttonFont);
+        translationEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        translationEditTextField.setForeground(Color.WHITE);
+        translationEditTextField.setBackground(buttonBgColor);
 
-        // Translation Text Field
-        translationTextField = new JTextField();
-        translationTextField.setBounds(140, 110, 230, 30);
-        translationTextField.setFont(buttonFont);
-        translationTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-        translationTextField.setForeground(Color.WHITE);
-        translationTextField.setBackground(buttonBgColor);
+        // Example Edit Text Field
+        exampleEditTextField = new JTextField();
+        exampleEditTextField.setBounds(140, 150, 230, 30);
+        exampleEditTextField.setFont(buttonFont);
+        exampleEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        exampleEditTextField.setForeground(Color.WHITE);
+        exampleEditTextField.setBackground(buttonBgColor);
 
-        // Example Text Field
-        exampleTextField = new JTextField();
-        exampleTextField.setBounds(140, 150, 230, 30);
-        exampleTextField.setFont(buttonFont);
-        exampleTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-        exampleTextField.setForeground(Color.WHITE);
-        exampleTextField.setBackground(buttonBgColor);
+        // Edit Notice Label
+        editNoticeLabel = new JAnimationLabel("", 15);
+        editNoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        editNoticeLabel.setBounds(60, 190, 300, 15);
+        editNoticeLabel.setFont(exampleFont);
+        editNoticeLabel.setForeground(Color.RED);
 
         // Edit Confirm Button
         editCfmBtn = new JRoundedButton("Confirm");
@@ -473,10 +691,11 @@ public class FrameContainer {
         panel.add(pronounceEditLabel);
         panel.add(translationEditLabel);
         panel.add(exampleEditLabel);
-        panel.add(wordTextField);
-        panel.add(pronounceTextField);
-        panel.add(translationTextField);
-        panel.add(exampleTextField);
+        panel.add(wordEditTextField);
+        panel.add(pronounceEditTextField);
+        panel.add(translationEditTextField);
+        panel.add(exampleEditTextField);
+        panel.add(editNoticeLabel);
         panel.add(editCfmBtn);
         panel.add(editCxlBtn);
 
@@ -496,6 +715,35 @@ public class FrameContainer {
      */
     public static void registerModePanelClickEvent() {
 
+        addWordBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (!addWordBtn.isEnabled()) {
+                    return;
+                }
+                frame.remove(modePanel);
+                frame.add(addPanel);
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!addWordBtn.isEnabled()) {
+                    return;
+                }
+                addWordBtn.setBackground(new Color(0, 136, 242));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!addWordBtn.isEnabled()) {
+                    return;
+                }
+                addWordBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
         learningModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -504,7 +752,7 @@ public class FrameContainer {
                 }
                 DataProcessor.setMode(1);
                 frame.remove(modePanel);
-                frame.add(learningPanel);
+                frame.add(studyPanel);
 
                 dkBtn.setVisible(true);
                 hmBtn.setVisible(true);
@@ -514,7 +762,6 @@ public class FrameContainer {
                 btmBtn.setVisible(false);
 
                 // Get First Word
-                // TODO - ENSK - 待处理 获取不到会报错
                 DataProcessor.nextWord();
                 wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
                 scoreLabel.setAnimationText(String.format("[%.2f]", DataProcessor.getCurrentWord().getLearnScore()));
@@ -532,7 +779,6 @@ public class FrameContainer {
                     return;
                 }
                 learningModeBtn.setBackground(new Color(98, 96, 95));
-
             }
 
             @Override
@@ -541,7 +787,6 @@ public class FrameContainer {
                     return;
                 }
                 learningModeBtn.setBackground(new Color(83, 81, 80));
-
             }
         });
 
@@ -553,7 +798,7 @@ public class FrameContainer {
                 }
                 DataProcessor.setMode(2);
                 frame.remove(modePanel);
-                frame.add(learningPanel);
+                frame.add(studyPanel);
 
                 dkBtn.setVisible(true);
                 hmBtn.setVisible(true);
@@ -596,7 +841,7 @@ public class FrameContainer {
             public void mouseReleased(MouseEvent e) {
                 DataProcessor.setMode(3);
                 frame.remove(modePanel);
-                frame.add(learningPanel);
+                frame.add(studyPanel);
 
                 dkBtn.setVisible(true);
                 hmBtn.setVisible(true);
@@ -627,18 +872,82 @@ public class FrameContainer {
                 mixedModeBtn.setBackground(new Color(83, 81, 80));
             }
         });
-
     }
 
     /**
-     * Register Learning Panel Click Event
+     * Register Add Panel Click Event
+     * <p>
+     *
+     * @author tojohnonly
+     * @date 2023/07/02 22:15
+     * @version 1.0.0
+     */
+    public static void registerAddPanelClickEvent() {
+        addCfmBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (null == wordAddTextField.getText() || wordAddTextField.getText().equals("")) {
+                    addNoticeLabel.setAnimationText("Word Can't Be Null!");
+                    return;
+                }
+                if (null == translationAddTextField.getText() || translationAddTextField.getText().equals("")) {
+                    addNoticeLabel.setAnimationText("Translation Can't Be Null!");
+                    return;
+                }
+                DataProcessor.addWord(wordAddTextField.getText(), pronounceAddTextField.getText(),
+                        translationAddTextField.getText(), exampleAddTextField.getText());
+                frame.remove(addPanel);
+                frame.add(modePanel);
+                wordAddTextField.setText("");
+                pronounceAddTextField.setText("");
+                translationAddTextField.setText("");
+                exampleAddTextField.setText("");
+                refreshModePanel();
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addCfmBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                addCfmBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        addCxlBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                frame.remove(addPanel);
+                frame.add(modePanel);
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addCxlBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                addCxlBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+    }
+
+    /**
+     * Register Study Panel Click Event
      * <p>
      *
      * @author tojohnonly
      * @date 2023/07/02 10:23
      * @version 1.0.0
      */
-    public static void registerLearningPanelClickEvent() {
+    public static void registerStudyPanelClickEvent() {
         dkBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -745,15 +1054,15 @@ public class FrameContainer {
         editBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                frame.remove(learningPanel);
+                frame.remove(studyPanel);
                 frame.add(editPanel);
 
-                wordTextField.setText(DataProcessor.getCurrentWord().getWord());
-                pronounceTextField.setText(DataProcessor.getCurrentWord().getPronounce());
-                translationTextField.setText(DataProcessor.getCurrentWord().getTranslation());
-                translationTextField.setCaretPosition(0);
-                exampleTextField.setText(DataProcessor.getCurrentWord().getExample());
-                exampleTextField.setCaretPosition(0);
+                wordEditTextField.setText(DataProcessor.getCurrentWord().getWord());
+                pronounceEditTextField.setText(DataProcessor.getCurrentWord().getPronounce());
+                translationEditTextField.setText(DataProcessor.getCurrentWord().getTranslation());
+                translationEditTextField.setCaretPosition(0);
+                exampleEditTextField.setText(DataProcessor.getCurrentWord().getExample());
+                exampleEditTextField.setCaretPosition(0);
 
                 frame.validate();
                 frame.repaint();
@@ -773,8 +1082,9 @@ public class FrameContainer {
         btmBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                frame.remove(learningPanel);
+                frame.remove(studyPanel);
                 frame.add(modePanel);
+                refreshModePanel();
                 frame.validate();
                 frame.repaint();
             }
@@ -803,17 +1113,22 @@ public class FrameContainer {
         editCfmBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-
-                DataProcessor.updateCurrentWord(wordTextField.getText(), pronounceTextField.getText(),
-                    translationTextField.getText(), exampleTextField.getText());
-
-                wordLabel.setAnimationText(wordTextField.getText());
-                pronounceLabel.setAnimationText(pronounceTextField.getText());
-                translationLabel.setAnimationText(translationTextField.getText());
-                exampleLabel.setAnimationText(exampleTextField.getText());
-
+                if (null == wordEditTextField.getText() || wordEditTextField.getText().equals("")) {
+                    editNoticeLabel.setAnimationText("Word Can't Be Null!");
+                    return;
+                }
+                if (null == translationEditTextField.getText() || translationEditTextField.getText().equals("")) {
+                    editNoticeLabel.setAnimationText("Translation Can't Be Null!");
+                    return;
+                }
+                DataProcessor.updateCurrentWord(wordEditTextField.getText(), pronounceEditTextField.getText(),
+                    translationEditTextField.getText(), exampleEditTextField.getText());
+                wordLabel.setAnimationText(wordEditTextField.getText());
+                pronounceLabel.setAnimationText(pronounceEditTextField.getText());
+                translationLabel.setAnimationText(translationEditTextField.getText());
+                exampleLabel.setAnimationText(exampleEditTextField.getText());
                 frame.remove(editPanel);
-                frame.add(learningPanel);
+                frame.add(studyPanel);
                 frame.validate();
                 frame.repaint();
             }
@@ -833,7 +1148,7 @@ public class FrameContainer {
             @Override
             public void mouseReleased(MouseEvent e) {
                 frame.remove(editPanel);
-                frame.add(learningPanel);
+                frame.add(studyPanel);
                 frame.validate();
                 frame.repaint();
             }
