@@ -1,5 +1,7 @@
 package com.ensk.study.vocabulary;
 
+import javax.swing.UIManager;
+
 public class Application {
 
     /**
@@ -10,7 +12,9 @@ public class Application {
      * @date 2023/07/03 09:30
      * @version 1.0.0
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        String lookAndFeel =UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(lookAndFeel);
         FrameContainer.start();
     }
 

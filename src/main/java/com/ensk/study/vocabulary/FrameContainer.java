@@ -10,11 +10,13 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileSystemView;
 
 public class FrameContainer {
 
@@ -38,6 +40,8 @@ public class FrameContainer {
     private static JRoundedButton addWordBtn;
     // Start Learning New Words Button
     private static JRoundedButton learningModeBtn;
+    // Choose Book Button
+    private static JRoundedButton chooseBookBtn;
     // Review Learned Content Button
     private static JRoundedButton reviewModeBtn;
     // Mixed Mode Button
@@ -122,7 +126,6 @@ public class FrameContainer {
     static JPanel editPanel;
 
     public static void start() {
-
         // Set Main Window Size
         frame.setSize(460, 315);
         // Set Main Window Location
@@ -263,13 +266,23 @@ public class FrameContainer {
 
         // Start Learning New Words Button
         learningModeBtn = new JRoundedButton("Start Learning New Words");
-        learningModeBtn.setBounds(80, 110, 285, 35);
+        learningModeBtn.setBounds(80, 110, 215, 35);
         learningModeBtn.setForeground(Color.WHITE);
         learningModeBtn.setFont(buttonFont);
         learningModeBtn.setBackground(buttonBgColor);
         learningModeBtn.setBorder(new RoundBorder());
         learningModeBtn.setBorderPainted(false);
         learningModeBtn.setFocusPainted(false);
+
+        // Choose Book Button
+        chooseBookBtn = new JRoundedButton("Books");
+        chooseBookBtn.setBounds(305, 110, 60, 35);
+        chooseBookBtn.setForeground(Color.WHITE);
+        chooseBookBtn.setFont(buttonFont);
+        chooseBookBtn.setBackground(buttonBgColor);
+        chooseBookBtn.setBorder(new RoundBorder());
+        chooseBookBtn.setBorderPainted(false);
+        chooseBookBtn.setFocusPainted(false);
 
         // Review Learned Content Button
         reviewModeBtn = new JRoundedButton("Review Learned Content");
@@ -294,6 +307,7 @@ public class FrameContainer {
         // Add component to panel
         panel.add(summaryLabel);
         panel.add(addWordBtn);
+        panel.add(chooseBookBtn);
         panel.add(learningModeBtn);
         panel.add(reviewModeBtn);
         panel.add(mixedModeBtn);
@@ -788,6 +802,48 @@ public class FrameContainer {
                     return;
                 }
                 learningModeBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
+
+        chooseBookBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (!chooseBookBtn.isEnabled()) {
+                    return;
+                }
+                chooseBookBtn.setBackground(new Color(83, 81, 80));
+
+                // create an object of JFileChooser class
+                JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                int chooseResult = fileChooser.showOpenDialog(null);
+                if (chooseResult == JFileChooser.APPROVE_OPTION) {
+                    String dbPath = fileChooser.getSelectedFile().getAbsolutePath();
+                    // Switch Database
+                    if (!DataProcessor.switchDatabase(dbPath)) {
+                        return;
+                    }
+
+                    refreshModePanel();
+                    frame.validate();
+                    frame.repaint();
+                }
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!chooseBookBtn.isEnabled()) {
+                    return;
+                }
+                chooseBookBtn.setBackground(new Color(252, 171, 54));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!chooseBookBtn.isEnabled()) {
+                    return;
+                }
+                chooseBookBtn.setBackground(new Color(83, 81, 80));
             }
         });
 

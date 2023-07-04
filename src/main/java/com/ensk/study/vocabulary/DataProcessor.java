@@ -40,6 +40,39 @@ public class DataProcessor {
         return false;
     }
 
+    protected static Boolean switchDatabase(String dbPath) {
+        try {
+            // Close Current Connection
+            if (null != statement) {
+                statement.close();
+            }
+            if (null != connection) {
+                connection.close();
+            }
+            System.out.println("Close Current Database Connection Successfully");
+
+            // Check Database File Exists
+            File file = new File(dbPath);
+            if (!file.exists()) {
+                System.err.println("Connect to " + dbPath + ", Database File Not Exists");
+                FrameContainer.noticeAndQuit("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
+                return false;
+            }
+
+            // Connect Database
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+            connection.setAutoCommit(true);
+            System.out.println("Open New Database Successfully");
+            statement = connection.createStatement();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Switch Database Error: " + e.getMessage());
+            FrameContainer.noticeAndQuit("Switch Database Error: " + e.getMessage());
+        }
+        return false;
+    }
+
     protected static void closeConnection() {
         System.out.println("Close Database Connection");
         try {
