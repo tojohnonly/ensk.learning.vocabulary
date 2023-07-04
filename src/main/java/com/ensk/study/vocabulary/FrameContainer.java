@@ -895,6 +895,10 @@ public class FrameContainer {
                     addNoticeLabel.setAnimationText("Translation Can't Be Null!");
                     return;
                 }
+                if (null != DataProcessor.queryWord(wordAddTextField.getText())) {
+                    addNoticeLabel.setAnimationText("Word Alread Exist!");
+                    return;
+                }
                 Boolean succeed = DataProcessor.addWord(wordAddTextField.getText(), pronounceAddTextField.getText(),
                         translationAddTextField.getText(), exampleAddTextField.getText());
                 if (!succeed) {
@@ -906,6 +910,7 @@ public class FrameContainer {
                 pronounceAddTextField.setText("");
                 translationAddTextField.setText("");
                 exampleAddTextField.setText("");
+                addNoticeLabel.setAnimationText("");
                 refreshModePanel();
                 frame.validate();
                 frame.repaint();
@@ -927,6 +932,11 @@ public class FrameContainer {
             public void mouseReleased(MouseEvent e) {
                 frame.remove(addPanel);
                 frame.add(modePanel);
+                wordAddTextField.setText("");
+                pronounceAddTextField.setText("");
+                translationAddTextField.setText("");
+                exampleAddTextField.setText("");
+                addNoticeLabel.setAnimationText("");
                 frame.validate();
                 frame.repaint();
             }

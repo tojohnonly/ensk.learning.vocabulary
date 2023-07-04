@@ -118,6 +118,35 @@ public class DataProcessor {
         }
     }
 
+    public static WordEntity queryWord(String wordReq) {
+        try {
+            String sql = "SELECT * FROM VOCABULARY WHERE WORD = '" + wordReq + "'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                WordEntity word = new WordEntity();
+                word.setId(resultSet.getInt("ID"));
+                word.setWord(resultSet.getString("WORD"));
+                word.setPronounce(resultSet.getString("PRONOUNCE"));
+                word.setTranslation(resultSet.getString("TRANSLATION"));
+                word.setExample(resultSet.getString("EXAMPLE"));
+                word.setLearnTimes(resultSet.getInt("LEARN_TIMES"));
+                word.setDnkTimes(resultSet.getInt("DNK_TIMES"));
+                word.setHmTimes(resultSet.getInt("HM_TIMES"));
+                word.setKimTimes(resultSet.getInt("KIM_TIMES"));
+                word.setLearnScore(resultSet.getFloat("LEARN_SCORE"));
+                resultSet.close();
+                return word;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.err.println("Get Next Word Error: " + e.getMessage());
+            FrameContainer.noticeAndQuit("Get Next Word Error: " + e.getMessage());
+        }
+        return null;
+    }
+
+
     public static void upadteScore(Integer wordId, Integer mode) {
         String sqlUpdateTimes = "";
         String sqlUpdateScore =
