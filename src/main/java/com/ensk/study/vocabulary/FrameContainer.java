@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -16,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileSystemView;
+import javax.swing.filechooser.FileFilter;
 
 public class FrameContainer {
 
@@ -279,7 +280,7 @@ public class FrameContainer {
         chooseBookBtn.setBounds(305, 110, 60, 35);
         chooseBookBtn.setForeground(Color.WHITE);
         chooseBookBtn.setFont(buttonFont);
-        chooseBookBtn.setBackground(buttonBgColor);
+        chooseBookBtn.setBackground(new Color(232, 151, 34));
         chooseBookBtn.setBorder(new RoundBorder());
         chooseBookBtn.setBorderPainted(false);
         chooseBookBtn.setFocusPainted(false);
@@ -813,8 +814,22 @@ public class FrameContainer {
                 }
                 chooseBookBtn.setBackground(new Color(83, 81, 80));
 
-                // create an object of JFileChooser class
-                JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                // Open FileChooser
+                JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                fileChooser.setFileFilter(new FileFilter() {
+                    @Override
+                    public String getDescription() {
+                        return "Sqlite Database File";
+                    }
+                    @Override
+                    public boolean accept(File file) {
+                        if (file.isDirectory()) {
+                            return true;
+                        } else {
+                            return (file.getName().toLowerCase().endsWith(".db") || file.getName().toLowerCase().endsWith(".db3"));
+                        }
+                    }
+                });
                 int chooseResult = fileChooser.showOpenDialog(null);
                 if (chooseResult == JFileChooser.APPROVE_OPTION) {
                     String dbPath = fileChooser.getSelectedFile().getAbsolutePath();
@@ -843,7 +858,7 @@ public class FrameContainer {
                 if (!chooseBookBtn.isEnabled()) {
                     return;
                 }
-                chooseBookBtn.setBackground(new Color(83, 81, 80));
+                chooseBookBtn.setBackground(new Color(232, 151, 34));
             }
         });
 

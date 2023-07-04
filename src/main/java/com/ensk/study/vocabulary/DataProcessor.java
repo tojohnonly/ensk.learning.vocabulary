@@ -114,8 +114,8 @@ public class DataProcessor {
                 return false;
             }
         } catch (SQLException e) {
-            System.err.println("Get Next Word Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Get Next Word Error: " + e.getMessage());
+            System.err.println("Check Mode Available Error: " + e.getMessage());
+            FrameContainer.noticeAndQuit("Check Mode Available Error: " + e.getMessage());
         }
         return true;
     }
