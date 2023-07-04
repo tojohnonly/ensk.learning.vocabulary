@@ -139,7 +139,7 @@ public class FrameContainer {
         // Set Background Color
         frame.getContentPane().setBackground(panelBgColor);
         // Set App Icon
-        ImageIcon imageIcon = new ImageIcon("AppIcon.png");
+        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "\\AppIcon.png");
         frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
         // frame.add(studyPanel);
         frame.addWindowListener(new WindowAdapter() {

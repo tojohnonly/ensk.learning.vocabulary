@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.filechooser.FileSystemView;
-
 public class DataProcessor {
 
     private static Connection connection = null;
@@ -18,8 +16,15 @@ public class DataProcessor {
 
     protected static Boolean connectDatabase() {
         try {
+            // Get Database File Path
+            // System.out.println(System.getProperty("user.dir"));
+            // System.out.println(System.getProperty("bookpath"));
+            // System.out.println(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath());
+            String dbPath = System.getProperty("bookpath");
+            if (null == dbPath || dbPath.equals("")) {
+                dbPath = System.getProperty("user.dir") + "\\VOCABULARY.db";
+            }
             // Check Database File Exists
-            String dbPath = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\VOCABULARY.db";
             File file = new File(dbPath);
             if (!file.exists()) {
                 System.err.println("Connect to " + dbPath + ", Database File Not Exists");
@@ -30,7 +35,7 @@ public class DataProcessor {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             connection.setAutoCommit(true);
-            System.out.println("Open Database Successfully");
+            System.out.println("Open Database (" + dbPath + ") Successfully");
             statement = connection.createStatement();
             return true;
         } catch (Exception e) {
