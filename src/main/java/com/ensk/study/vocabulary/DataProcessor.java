@@ -14,7 +14,7 @@ public class DataProcessor {
     private static WordEntity currentWord;
     private static Integer studyMode = 3;
 
-    protected static Boolean connectDatabase() {
+    protected static void connectDatabase() {
         try {
             // Get Database File Path
             // System.out.println(System.getProperty("user.dir"));
@@ -28,8 +28,7 @@ public class DataProcessor {
             File file = new File(dbPath);
             if (!file.exists()) {
                 System.err.println("Connect to " + dbPath + ", Database File Not Exists");
-                FrameContainer.noticeAndQuit("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
-                return false;
+                throw new RuntimeException("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
             }
             // Connect Database
             Class.forName("org.sqlite.JDBC");
@@ -37,15 +36,13 @@ public class DataProcessor {
             connection.setAutoCommit(true);
             System.out.println("Open Database (" + dbPath + ") Successfully");
             statement = connection.createStatement();
-            return true;
         } catch (Exception e) {
             System.err.println("Open Database Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Open Database Error: " + e.getMessage());
+            throw new RuntimeException("Open Database Error: " + e.getMessage());
         }
-        return false;
     }
 
-    protected static Boolean switchDatabase(String dbPath) {
+    protected static void switchDatabase(String dbPath) {
         try {
             // Close Current Connection
             if (null != statement) {
@@ -60,8 +57,7 @@ public class DataProcessor {
             File file = new File(dbPath);
             if (!file.exists()) {
                 System.err.println("Connect to " + dbPath + ", Database File Not Exists");
-                FrameContainer.noticeAndQuit("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
-                return false;
+                throw new RuntimeException("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
             }
 
             // Connect Database
@@ -70,12 +66,10 @@ public class DataProcessor {
             connection.setAutoCommit(true);
             System.out.println("Open New Database Successfully");
             statement = connection.createStatement();
-            return true;
         } catch (Exception e) {
             System.err.println("Switch Database Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Switch Database Error: " + e.getMessage());
+            throw new RuntimeException("Switch Database Error: " + e.getMessage());
         }
-        return false;
     }
 
     protected static void closeConnection() {
@@ -115,9 +109,8 @@ public class DataProcessor {
             }
         } catch (SQLException e) {
             System.err.println("Check Mode Available Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Check Mode Available Error: " + e.getMessage());
+            throw new RuntimeException("Check Mode Available Error: " + e.getMessage());
         }
-        return true;
     }
 
     public static void nextWord() {
@@ -148,11 +141,11 @@ public class DataProcessor {
                 currentWord = word;
             } else {
                 System.err.println("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
-                FrameContainer.noticeAndQuit("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                throw new RuntimeException("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Get Next Word Error: " + e.getMessage());
+            throw new RuntimeException("Get Next Word Error: " + e.getMessage());
         }
     }
 
@@ -179,9 +172,8 @@ public class DataProcessor {
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Get Next Word Error: " + e.getMessage());
+            throw new RuntimeException("Get Next Word Error: " + e.getMessage());
         }
-        return null;
     }
 
 
@@ -204,7 +196,7 @@ public class DataProcessor {
             statement.executeUpdate(sqlUpdateScore);
         } catch (SQLException e) {
             System.err.println("Upadte Score Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Upadte Score Error: " + e.getMessage());
+            throw new RuntimeException("Upadte Score Error: " + e.getMessage());
         }
     }
 
@@ -244,26 +236,23 @@ public class DataProcessor {
                 return wordCount;
             } else {
                 System.err.println("Get Word Count Error, No Eligible Word of This Mode In Database");
-                FrameContainer.noticeAndQuit("Get Word Count Error, No Eligible Word of This Mode In Database");
+                throw new RuntimeException("Get Word Count Error, No Eligible Word of This Mode In Database");
             }
         } catch (SQLException e) {
             System.err.println("Get Word Count Error: " + e.getMessage());
-            FrameContainer.noticeAndQuit("Get Word Count Error: " + e.getMessage());
+            throw new RuntimeException("Get Word Count Error: " + e.getMessage());
         }
-        return 0;
     }
 
-    public static Boolean addWord(String word, String pronounce, String translation, String example) {
+    public static void addWord(String word, String pronounce, String translation, String example) {
         String sqlAddWord = "INSERT INTO VOCABULARY (WORD, PRONOUNCE, TRANSLATION, EXAMPLE) VALUES ('" + word + "', "
             + ((null == pronounce || pronounce.equals("")) ? "NULL, '" : ("'" + pronounce + "', '")) + translation
             + "', " + ((null == example || example.equals("")) ? "NULL);" : ("'" + example + "');"));
             try {
                 statement.executeUpdate(sqlAddWord);
-                return true;
             } catch (SQLException e) {
                 System.err.println("Add Word Error: " + e.getMessage());
-                FrameContainer.noticeAndQuit("Add Word Error: " + e.getMessage());
-                return false;
+                throw new RuntimeException("Add Word Error: " + e.getMessage());
             }
     }
 
@@ -305,7 +294,7 @@ public class DataProcessor {
                 statement.executeUpdate(sql);
             } catch (SQLException e) {
                 System.err.println("Update Current Word Error: " + e.getMessage());
-                FrameContainer.noticeAndQuit("Update Current Word Error: " + e.getMessage());
+                throw new RuntimeException("Update Current Word Error: " + e.getMessage());
             }
         }
     }

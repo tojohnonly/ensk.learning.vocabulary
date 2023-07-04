@@ -152,9 +152,7 @@ public class FrameContainer {
         frame.setVisible(true);
 
         // Connect Database
-        if (!DataProcessor.connectDatabase()) {
-            return;
-        }
+        DataProcessor.connectDatabase();
 
         // Load First Panel
         modePanel = assembleModePanel();
@@ -834,9 +832,7 @@ public class FrameContainer {
                 if (chooseResult == JFileChooser.APPROVE_OPTION) {
                     String dbPath = fileChooser.getSelectedFile().getAbsolutePath();
                     // Switch Database
-                    if (!DataProcessor.switchDatabase(dbPath)) {
-                        return;
-                    }
+                    DataProcessor.switchDatabase(dbPath);
 
                     refreshModePanel();
                     frame.validate();
@@ -970,11 +966,10 @@ public class FrameContainer {
                     addNoticeLabel.setAnimationText("Word Alread Exist!");
                     return;
                 }
-                Boolean succeed = DataProcessor.addWord(wordAddTextField.getText(), pronounceAddTextField.getText(),
+
+                DataProcessor.addWord(wordAddTextField.getText(), pronounceAddTextField.getText(),
                         translationAddTextField.getText(), exampleAddTextField.getText());
-                if (!succeed) {
-                    return;
-                }
+
                 frame.remove(addPanel);
                 frame.add(modePanel);
                 wordAddTextField.setText("");

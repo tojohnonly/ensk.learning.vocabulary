@@ -13,6 +13,7 @@ public class Application {
      * @version 1.0.0
      */
     public static void main(String[] args) throws Exception {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         String lookAndFeel =UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(lookAndFeel);
         FrameContainer.start();
