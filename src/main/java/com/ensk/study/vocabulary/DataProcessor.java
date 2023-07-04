@@ -186,15 +186,17 @@ public class DataProcessor {
         return 0;
     }
 
-    public static void addWord(String word, String pronounce, String translation, String example) {
+    public static Boolean addWord(String word, String pronounce, String translation, String example) {
         String sqlAddWord = "INSERT INTO VOCABULARY (WORD, PRONOUNCE, TRANSLATION, EXAMPLE) VALUES ('" + word + "', "
             + ((null == pronounce || pronounce.equals("")) ? "NULL, '" : ("'" + pronounce + "', '")) + translation
             + "', " + ((null == example || example.equals("")) ? "NULL);" : ("'" + example + "');"));
             try {
                 statement.executeUpdate(sqlAddWord);
+                return true;
             } catch (SQLException e) {
                 System.err.println("Add Word Error: " + e.getMessage());
                 FrameContainer.noticeAndQuit("Add Word Error: " + e.getMessage());
+                return false;
             }
     }
 

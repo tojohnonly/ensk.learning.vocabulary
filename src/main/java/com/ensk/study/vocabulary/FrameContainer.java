@@ -895,8 +895,11 @@ public class FrameContainer {
                     addNoticeLabel.setAnimationText("Translation Can't Be Null!");
                     return;
                 }
-                DataProcessor.addWord(wordAddTextField.getText(), pronounceAddTextField.getText(),
+                Boolean succeed = DataProcessor.addWord(wordAddTextField.getText(), pronounceAddTextField.getText(),
                         translationAddTextField.getText(), exampleAddTextField.getText());
+                if (!succeed) {
+                    return;
+                }
                 frame.remove(addPanel);
                 frame.add(modePanel);
                 wordAddTextField.setText("");
