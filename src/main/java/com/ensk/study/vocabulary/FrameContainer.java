@@ -953,7 +953,7 @@ public class FrameContainer {
      * @version 1.0.0
      */
     public static void registerAddPanelClickEvent() {
-        
+
         wordAddTextField.addFocusListener(new FocusListener(){
             @Override
             public void focusLost(FocusEvent e){
@@ -963,6 +963,9 @@ public class FrameContainer {
                 }
                 if (null != DataProcessor.queryWord(wordAddTextField.getText())) {
                     addNoticeLabel.setAnimationText("Word Alread Exist!");
+                    return;
+                } else {
+                    addNoticeLabel.setAnimationText("");
                     return;
                 }
             }
@@ -978,12 +981,12 @@ public class FrameContainer {
                     addNoticeLabel.setAnimationText("Word Can't Be Null!");
                     return;
                 }
-                if (null == translationAddTextField.getText() || translationAddTextField.getText().equals("")) {
-                    addNoticeLabel.setAnimationText("Translation Can't Be Null!");
-                    return;
-                }
                 if (null != DataProcessor.queryWord(wordAddTextField.getText())) {
                     addNoticeLabel.setAnimationText("Word Alread Exist!");
+                    return;
+                }
+                if (null == translationAddTextField.getText() || translationAddTextField.getText().equals("")) {
+                    addNoticeLabel.setAnimationText("Translation Can't Be Null!");
                     return;
                 }
 
