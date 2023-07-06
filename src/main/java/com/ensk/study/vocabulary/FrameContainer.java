@@ -3,6 +3,8 @@ package com.ensk.study.vocabulary;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -951,6 +953,24 @@ public class FrameContainer {
      * @version 1.0.0
      */
     public static void registerAddPanelClickEvent() {
+        
+        wordAddTextField.addFocusListener(new FocusListener(){
+            @Override
+            public void focusLost(FocusEvent e){
+                if (null == wordAddTextField.getText() || wordAddTextField.getText().equals("")) {
+                    addNoticeLabel.setAnimationText("Word Can't Be Null!");
+                    return;
+                }
+                if (null != DataProcessor.queryWord(wordAddTextField.getText())) {
+                    addNoticeLabel.setAnimationText("Word Alread Exist!");
+                    return;
+                }
+            }
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+        });
+
         addCfmBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
