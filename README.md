@@ -4,7 +4,7 @@ Ensk Learning Vocabulary，基于JDK11、Sqlite开发的（理论上JDK1.8也能
 
 程序运行前，请首先安装 `doc\font` 文件夹里面的 `霞鹜文楷_1.300.zip` ，以获得最佳的显示效果。
 
-直接点击RUN.bat即可运行。
+直接点击 **RUN.bat** 即可运行。
 
 主界面如下如所示：
 
@@ -22,7 +22,7 @@ Ensk Learning Vocabulary，基于JDK11、Sqlite开发的（理论上JDK1.8也能
 
 ![mian](doc/interface/study_1.png)
 
-然后会记录当前词汇 `学习次数` `+1`  `Don't Know 次数` `+1`。如果对这个单词有点影响，但又不确定，可以点击 `Hazy Memory`，也会显示翻译和例句，同时 `学习次数` `+1`  `Hazy Memory 次数` `+1`。同理点击 `Keep In Mind`，在显示翻译和例句后，`学习次数` `+1`  `Keep In Mind 次数` `+1`。
+然后会记录当前词汇 `学习次数 +1 Don't Know 次数 +1`。如果对这个单词有点印象，但又不确定，可以点击 `Hazy Memory`，也会显示翻译和例句，同时 `学习次数 +1 Hazy Memory 次数 +1`。同理点击 `Keep In Mind`，在显示翻译和例句后，`学习次数 +1 Keep In Mind 次数 +1`。
 
 每次点击如上的三个按钮，都会计算当前单词的学习分数，计算规则如下：( `Don't Know 次数` X `0.1` + `Hazy Memory 次数` X `0.5`  + `Keep In Mind` X `1.0`  ) / `学习次数`，单词分数最高为1.0分，同时显示在单词发音的前面，如：`[0.87]`
 
