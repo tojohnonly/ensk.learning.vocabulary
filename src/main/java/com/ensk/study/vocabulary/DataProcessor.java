@@ -15,21 +15,30 @@ public class DataProcessor {
     private static Integer studyMode = 3;
 
     protected static void connectDatabase() {
+        // Get Database File Path
+        String dbPath = System.getProperty("bookpath");
+        if (null == dbPath || dbPath.equals("")) {
+            File userDir = new File(System.getProperty("user.dir"));
+            File[] dbs = userDir.listFiles(userDirFile -> {
+                if (userDirFile.isFile() && userDirFile.getName().endsWith(".db")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            if (dbs.length <= 0) {
+                throw new RuntimeException("No Database File In: " + System.getProperty("user.dir").replace("\\", " -> "));
+            }
+            dbPath = dbs[0].getAbsolutePath();
+        }
+        // Check Database File Exists
+        File file = new File(dbPath);
+        if (!file.exists()) {
+            System.err.println("Connect to " + dbPath + ", Database File Not Exists");
+            throw new RuntimeException(
+                "Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
+        }
         try {
-            // Get Database File Path
-            // System.out.println(System.getProperty("user.dir"));
-            // System.out.println(System.getProperty("bookpath"));
-            // System.out.println(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath());
-            String dbPath = System.getProperty("bookpath");
-            if (null == dbPath || dbPath.equals("")) {
-                dbPath = System.getProperty("user.dir") + "\\VOCABULARY.db";
-            }
-            // Check Database File Exists
-            File file = new File(dbPath);
-            if (!file.exists()) {
-                System.err.println("Connect to " + dbPath + ", Database File Not Exists");
-                throw new RuntimeException("Connect to \"" + dbPath.replace("\\", " -> ") + "\" Failed, Database File Not Exists");
-            }
             // Connect Database
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
