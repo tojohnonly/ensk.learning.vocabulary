@@ -82,7 +82,6 @@ public class DataProcessor {
     }
 
     protected static void closeConnection() {
-        System.out.println("Close Database Connection");
         try {
             if (null != statement) {
                 statement.close();
@@ -93,6 +92,7 @@ public class DataProcessor {
         } catch (SQLException e) {
             System.err.println("Close Database Connection Error: " + e.getMessage());
         }
+        System.out.println("Close Database Connection Successfully");
     }
 
     protected static void setMode(Integer mode) {
