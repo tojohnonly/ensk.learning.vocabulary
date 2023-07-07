@@ -103,11 +103,11 @@ public class DataProcessor {
         try {
             String sql = "";
             if (mode == 1) {
-                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE < 0.3 ORDER BY RANDOM() LIMIT 0,1";
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE <= 0 LIMIT 0,1";
             } else if (mode == 2) {
-                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0.3 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0 AND LEARN_SCORE < 0.8 LIMIT 0,1";
             } else if (mode == 3) {
-                sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
+                sql = "SELECT * FROM VOCABULARY LIMIT 0,1";
             }
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -128,7 +128,7 @@ public class DataProcessor {
             if (studyMode == 1) {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE <= 0 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 2) {
-                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0 AND LEARN_SCORE < 0.8 ORDER BY RANDOM() LIMIT 0,1";
+                sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0 AND LEARN_SCORE < 0.7 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 3) {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
             }
