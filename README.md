@@ -24,7 +24,7 @@ Ensk Learning Vocabulary，基于JDK11、Sqlite开发的（理论上JDK1.8也能
 
 然后会记录当前词汇 `学习次数 +1 Don't Know 次数 +1`。如果对这个单词有点印象，但又不确定，可以点击 `Hazy Memory`，也会显示翻译和例句，同时 `学习次数 +1 Hazy Memory 次数 +1`。同理点击 `Keep In Mind`，在显示翻译和例句后，`学习次数 +1 Keep In Mind 次数 +1`。
 
-每次点击如上的三个按钮，都会计算当前单词的学习分数，计算规则如下：( `Don't Know 次数` X `0.1` + `Hazy Memory 次数` X `0.5`  + `Keep In Mind` X `1.0`  ) / `学习次数`，单词分数最高为1.0分，同时显示在单词发音的前面，如：`[0.87]`
+每次点击如上的三个按钮，都会计算当前单词的学习分数，计算规则如下：( `Don't Know 次数` X `0.1` + `Hazy Memory 次数` X `0.5`  + `Keep In Mind` X `1.0`  ) / `学习次数`，计分的范围为最近的五次学习记录，单词分数最高为1.0分，同时显示在单词发音的前面，如：`[0.87]`
 
 点击 `Next Word` 按钮，会继续学习下一个随机单词。
 
@@ -32,7 +32,7 @@ Ensk Learning Vocabulary，基于JDK11、Sqlite开发的（理论上JDK1.8也能
 
 ![mian](doc/interface/edit.png)
 
-以上说的学习模式是 `Start Learn New Words`，还有另外两个模式： `Review Learned Content`，会随机学习已经学习过的，分数在0.1~0.7的单词。 `Mixed Mode`，会随机学习全部单词。
+以上说的学习模式是 `Start Learn New Words`，还有另外两个模式： `Review Learned Content`，会随机学习已经学习过的，分数在0.1~0.7的单词。 `Mixed Mode`，会随机学习全部单词。 `Recent 100`，会随机学习最近的100个单词单词。
 
 
 程序默认的库是雅思词库，如果想选择其他词库，如CET4，可以把从 `doc\db` 目录下复制对应的db文件到当前运行目录，并备份当前目录的现在学习的db文件，重新运行程序即可。程序运行时会首先检查当前运行目录是否存在.db结尾的Sqlite数据库文件，存在的话会直接连接这个数据库文件（存在多个会默认连接第一个）。

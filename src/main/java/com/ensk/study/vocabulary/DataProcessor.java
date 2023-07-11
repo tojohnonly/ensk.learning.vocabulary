@@ -6,8 +6,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class DataProcessor {
 
@@ -15,7 +16,7 @@ public class DataProcessor {
     private static Statement statement;
     private static WordEntity currentWord;
     private static Integer studyMode;
-    private static Queue<Integer> recentWordIds;
+    private static List<Integer> recentWordIds;
 
     protected static void connectDatabase() {
         // Get Database File Path
@@ -130,18 +131,20 @@ public class DataProcessor {
     public static Integer getMode4WordId() {
         try {
             if (null == recentWordIds) {
-                recentWordIds = new LinkedList<>();
+                recentWordIds = new ArrayList<>();
                 ResultSet ids = statement.executeQuery("SELECT ID FROM VOCABULARY ORDER BY UPDATED_TIME DESC LIMIT 0,100");
                 while (ids.next()) {
-                    recentWordIds.offer(ids.getInt("ID"));
+                    recentWordIds.add(ids.getInt("ID"));
                 }
-                return recentWordIds.poll();
+                int randomIndex = (new Random()).nextInt(recentWordIds.size());
+                return recentWordIds.remove(randomIndex);
             } else {
                 if (recentWordIds.isEmpty()) {
                     System.err.println("Get Next Word Error: No Eligible Word of This Mode In Database, Try a Different Study Mode");
                     throw new RuntimeException("Get Next Word Error: No Eligible Word of This Mode In Database, Try a Different Study Mode");
                 } else {
-                    return recentWordIds.poll();
+                    int randomIndex = (new Random()).nextInt(recentWordIds.size());
+                    return recentWordIds.remove(randomIndex);
                 }
             }
         } catch (SQLException e) {
@@ -241,8 +244,8 @@ public class DataProcessor {
             sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
         }
 
-        learnHistory = learnHistory.substring(0, (learnHistory.length() > 5) ? 5 : learnHistory.length());
-        Float score = calculateScore(learnHistory);
+        String scoreHistory = learnHistory.substring(0, (learnHistory.length() > 5) ? 5 : learnHistory.length());
+        Float score = calculateScore(scoreHistory);
         String sqlUpdateScore = "UPDATE VOCABULARY SET LEARN_HISTORY = '" + learnHistory + "', LEARN_SCORE = " + score
                 + ", UPDATED_TIME = " + System.currentTimeMillis() + " WHERE ID = " + wordId;
 
