@@ -1121,7 +1121,7 @@ public class FrameContainer {
         dkBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                DataProcessor.upadteScore(DataProcessor.getCurrentWord().getId(), 1);
+                DataProcessor.updateScore(DataProcessor.getCurrentWord(), 1);
                 translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
                 exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
                 dkBtn.setVisible(false);
@@ -1146,7 +1146,7 @@ public class FrameContainer {
         hmBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                DataProcessor.upadteScore(DataProcessor.getCurrentWord().getId(), 2);
+                DataProcessor.updateScore(DataProcessor.getCurrentWord(), 2);
                 translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
                 exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
                 dkBtn.setVisible(false);
@@ -1171,7 +1171,7 @@ public class FrameContainer {
         kimBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                DataProcessor.upadteScore(DataProcessor.getCurrentWord().getId(), 3);
+                DataProcessor.updateScore(DataProcessor.getCurrentWord(), 3);
                 translationLabel.setAnimationText(DataProcessor.getCurrentWord().getTranslation());
                 exampleLabel.setAnimationText(DataProcessor.getCurrentWord().getExample());
                 dkBtn.setVisible(false);

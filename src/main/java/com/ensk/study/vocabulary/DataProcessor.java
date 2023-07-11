@@ -180,6 +180,7 @@ public class DataProcessor {
                 word.setDnkTimes(resultSet.getInt("DNK_TIMES"));
                 word.setHmTimes(resultSet.getInt("HM_TIMES"));
                 word.setKimTimes(resultSet.getInt("KIM_TIMES"));
+                word.setLearnHistory(resultSet.getString("LEARN_HISTORY"));
                 word.setLearnScore(resultSet.getFloat("LEARN_SCORE"));
                 resultSet.close();
                 currentWord = word;
@@ -221,16 +222,30 @@ public class DataProcessor {
     }
 
 
-    public static void upadteScore(Integer wordId, Integer mode) {
+    public static void updateScore(WordEntity word, Integer mode) {
+        Integer wordId = word.getId();
+        String learnHistory = word.getLearnHistory();
+        if (null == learnHistory) {
+            learnHistory = "";
+        }
+
         String sqlUpdateTimes = "";
-        String sqlUpdateScore = "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = " + wordId;
         if (mode == 1) {
+            learnHistory = "C" + learnHistory;
             sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
         } else if (mode == 2) {
+            learnHistory = "B" + learnHistory;
             sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, HM_TIMES = HM_TIMES + 1 WHERE ID = " + wordId;
         } else if (mode == 3) {
+            learnHistory = "A" + learnHistory;
             sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
         }
+
+        learnHistory = learnHistory.substring(0, (learnHistory.length() > 5) ? 5 : learnHistory.length());
+        Float score = calculateScore(learnHistory);
+        String sqlUpdateScore = "UPDATE VOCABULARY SET LEARN_HISTORY = '" + learnHistory + "', LEARN_SCORE = " + score
+                + ", UPDATED_TIME = " + System.currentTimeMillis() + " WHERE ID = " + wordId;
+
         try {
             statement.executeUpdate(sqlUpdateTimes);
             statement.executeUpdate(sqlUpdateScore);
@@ -238,6 +253,26 @@ public class DataProcessor {
             System.err.println("Upadte Score Error: " + e.getMessage());
             throw new RuntimeException("Upadte Score Error: " + e.getMessage());
         }
+    }
+
+    public static Float calculateScore(String learnHistory) {
+        Float score = 0f;
+        for (char c : learnHistory.toCharArray()) {
+            switch (c) {
+                case 'A':
+                    score += 1.0f;
+                    break;
+                case 'B':
+                    score += 0.5f;
+                    break;
+                case 'C':
+                    score += 0.1f;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return (score / learnHistory.length());
     }
 
     public static WordEntity getCurrentWord() {

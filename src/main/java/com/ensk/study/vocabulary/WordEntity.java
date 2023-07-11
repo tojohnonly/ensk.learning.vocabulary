@@ -11,7 +11,9 @@ public class WordEntity {
     private Integer dnkTimes;
     private Integer hmTimes;
     private Integer kimTimes;
+    private String learnHistory;
     private Float learnScore;
+    private Integer updatedTime;
 
     public Integer getId() {
         return id;
@@ -85,6 +87,14 @@ public class WordEntity {
         this.kimTimes = kimTimes;
     }
 
+    public String getLearnHistory() {
+        return learnHistory;
+    }
+
+    public void setLearnHistory(String learnHistory) {
+        this.learnHistory = learnHistory;
+    }
+
     public Float getLearnScore() {
         return learnScore;
     }
@@ -92,4 +102,13 @@ public class WordEntity {
     public void setLearnScore(Float learnScore) {
         this.learnScore = learnScore;
     }
+
+    public Integer getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Integer updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
 }
