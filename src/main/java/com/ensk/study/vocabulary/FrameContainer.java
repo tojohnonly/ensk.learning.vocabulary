@@ -339,6 +339,9 @@ public class FrameContainer {
         if (!DataProcessor.checkModeAvailable(3)) {
             mixedModeBtn.setEnabled(false);
         }
+        if (!DataProcessor.checkModeAvailable(4)) {
+            recent100ModeBtn.setEnabled(false);
+        }
 
         return panel;
     }
@@ -359,6 +362,8 @@ public class FrameContainer {
         summaryLabel.setAnimationText("All Words:&nbsp;&nbsp;&nbsp;" + allWordCount
                 + "<br/>Unstudied:&nbsp;&nbsp;" + unstudiedWordCount + "<br/>Mastered:&nbsp;&nbsp;&nbsp;" + masteredWordCount);
 
+        DataProcessor.clearMode4Word();
+
         // Check Mode Available
         if (!DataProcessor.checkModeAvailable(1)) {
             learningModeBtn.setEnabled(false);
@@ -368,6 +373,9 @@ public class FrameContainer {
         }
         if (!DataProcessor.checkModeAvailable(3)) {
             mixedModeBtn.setEnabled(false);
+        }
+        if (!DataProcessor.checkModeAvailable(4)) {
+            recent100ModeBtn.setEnabled(false);
         }
     }
 
@@ -959,6 +967,9 @@ public class FrameContainer {
         recent100ModeBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (!recent100ModeBtn.isEnabled()) {
+                    return;
+                }
                 DataProcessor.setMode(4);
                 frame.remove(modePanel);
                 frame.add(studyPanel);
@@ -984,11 +995,17 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                if (!recent100ModeBtn.isEnabled()) {
+                    return;
+                }
                 recent100ModeBtn.setBackground(new Color(98, 96, 95));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+                if (!recent100ModeBtn.isEnabled()) {
+                    return;
+                }
                 recent100ModeBtn.setBackground(new Color(83, 81, 80));
             }
         });
@@ -1237,7 +1254,6 @@ public class FrameContainer {
             public void mouseReleased(MouseEvent e) {
                 frame.remove(studyPanel);
                 frame.add(modePanel);
-                DataProcessor.clearMode4Word();
                 refreshModePanel();
                 frame.validate();
                 frame.repaint();

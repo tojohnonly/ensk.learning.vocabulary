@@ -138,8 +138,8 @@ public class DataProcessor {
                 return recentWordIds.poll();
             } else {
                 if (recentWordIds.isEmpty()) {
-                    System.err.println("No Eligible Word of This Mode In Database, Try a Different Study Mode");
-                    throw new RuntimeException("No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                    System.err.println("Get Next Word Error: No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                    throw new RuntimeException("Get Next Word Error: No Eligible Word of This Mode In Database, Try a Different Study Mode");
                 } else {
                     return recentWordIds.poll();
                 }
@@ -184,8 +184,8 @@ public class DataProcessor {
                 resultSet.close();
                 currentWord = word;
             } else {
-                System.err.println("No Eligible Word of This Mode In Database, Try a Different Study Mode");
-                throw new RuntimeException("No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                System.err.println("Get Next Word Error: No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                throw new RuntimeException("Get Next Word Error: No Eligible Word of This Mode In Database, Try a Different Study Mode");
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
