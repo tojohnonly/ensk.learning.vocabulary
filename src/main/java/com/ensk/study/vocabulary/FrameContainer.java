@@ -367,15 +367,23 @@ public class FrameContainer {
         // Check Mode Available
         if (!DataProcessor.checkModeAvailable(1)) {
             learningModeBtn.setEnabled(false);
+        } else {
+            learningModeBtn.setEnabled(true);
         }
         if (!DataProcessor.checkModeAvailable(2)) {
             reviewModeBtn.setEnabled(false);
+        } else {
+            reviewModeBtn.setEnabled(true);
         }
         if (!DataProcessor.checkModeAvailable(3)) {
             mixedModeBtn.setEnabled(false);
+        } else {
+            mixedModeBtn.setEnabled(true);
         }
         if (!DataProcessor.checkModeAvailable(4)) {
             recent100ModeBtn.setEnabled(false);
+        } else {
+            recent100ModeBtn.setEnabled(true);
         }
     }
 

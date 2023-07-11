@@ -132,7 +132,7 @@ public class DataProcessor {
         try {
             if (null == recentWordIds) {
                 recentWordIds = new ArrayList<>();
-                ResultSet ids = statement.executeQuery("SELECT ID FROM VOCABULARY ORDER BY UPDATED_TIME DESC LIMIT 0,100");
+                ResultSet ids = statement.executeQuery("SELECT ID FROM VOCABULARY WHERE UPDATED_TIME IS NOT NULL ORDER BY UPDATED_TIME DESC LIMIT 0,100");
                 while (ids.next()) {
                     recentWordIds.add(ids.getInt("ID"));
                 }
