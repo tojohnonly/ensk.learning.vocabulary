@@ -6,13 +6,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class DataProcessor {
 
-    private static Connection connection = null;
-    private static Statement statement = null;
+    private static Connection connection;
+    private static Statement statement;
     private static WordEntity currentWord;
-    private static Integer studyMode = 3;
+    private static Integer studyMode;
+    private static Queue<Integer> recentWordIds;
 
     protected static void connectDatabase() {
         // Get Database File Path
@@ -108,6 +111,8 @@ public class DataProcessor {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0 AND LEARN_SCORE < 0.8 LIMIT 0,1";
             } else if (mode == 3) {
                 sql = "SELECT * FROM VOCABULARY LIMIT 0,1";
+            } else if (mode == 4) {
+                sql = "SELECT * FROM VOCABULARY WHERE UPDATED_TIME IS NOT NULL LIMIT 0,1";
             }
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -122,6 +127,33 @@ public class DataProcessor {
         }
     }
 
+    public static Integer getMode4WordId() {
+        try {
+            if (null == recentWordIds) {
+                recentWordIds = new LinkedList<>();
+                ResultSet ids = statement.executeQuery("SELECT ID FROM VOCABULARY ORDER BY UPDATED_TIME DESC LIMIT 0,100");
+                while (ids.next()) {
+                    recentWordIds.offer(ids.getInt("ID"));
+                }
+                return recentWordIds.poll();
+            } else {
+                if (recentWordIds.isEmpty()) {
+                    System.err.println("No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                    throw new RuntimeException("No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                } else {
+                    return recentWordIds.poll();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Get Next Word Error: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public static void clearMode4Word() {
+        recentWordIds = null;
+    }
+
     public static void nextWord() {
         try {
             String sql = "";
@@ -131,6 +163,9 @@ public class DataProcessor {
                 sql = "SELECT * FROM VOCABULARY WHERE LEARN_SCORE > 0 AND LEARN_SCORE < 0.7 ORDER BY RANDOM() LIMIT 0,1";
             } else if (studyMode == 3) {
                 sql = "SELECT * FROM VOCABULARY ORDER BY RANDOM() LIMIT 0,1";
+            } else if (studyMode == 4) {
+                Integer mode4WordId = getMode4WordId();
+                sql = "SELECT * FROM VOCABULARY WHERE ID = " + mode4WordId;
             }
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -149,8 +184,8 @@ public class DataProcessor {
                 resultSet.close();
                 currentWord = word;
             } else {
-                System.err.println("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
-                throw new RuntimeException("Get Next Word Error, No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                System.err.println("No Eligible Word of This Mode In Database, Try a Different Study Mode");
+                throw new RuntimeException("No Eligible Word of This Mode In Database, Try a Different Study Mode");
             }
         } catch (SQLException e) {
             System.err.println("Get Next Word Error: " + e.getMessage());
@@ -188,17 +223,13 @@ public class DataProcessor {
 
     public static void upadteScore(Integer wordId, Integer mode) {
         String sqlUpdateTimes = "";
-        String sqlUpdateScore =
-            "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = " + wordId;
+        String sqlUpdateScore = "UPDATE VOCABULARY SET LEARN_SCORE = IIF(LEARN_TIMES > 0, (DNK_TIMES * 0.1 + HM_TIMES * 0.5 + KIM_TIMES * 1) / LEARN_TIMES , 0) WHERE ID = " + wordId;
         if (mode == 1) {
-            sqlUpdateTimes =
-                "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
+            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, DNK_TIMES = DNK_TIMES + 1 WHERE ID = " + wordId;
         } else if (mode == 2) {
-            sqlUpdateTimes =
-                "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, HM_TIMES = HM_TIMES + 1 WHERE ID = " + wordId;
+            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, HM_TIMES = HM_TIMES + 1 WHERE ID = " + wordId;
         } else if (mode == 3) {
-            sqlUpdateTimes =
-                "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
+            sqlUpdateTimes = "UPDATE VOCABULARY SET LEARN_TIMES = LEARN_TIMES + 1, KIM_TIMES = KIM_TIMES + 1 WHERE ID = " + wordId;
         }
         try {
             statement.executeUpdate(sqlUpdateTimes);

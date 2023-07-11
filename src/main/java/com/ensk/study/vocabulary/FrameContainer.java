@@ -49,6 +49,8 @@ public class FrameContainer {
     private static JRoundedButton reviewModeBtn;
     // Mixed Mode Button
     private static JRoundedButton mixedModeBtn;
+    // Recent 100 Mode Button
+    private static JRoundedButton recent100ModeBtn;
 
     // Word Add Label
     private static JLabel wordAddLabel;
@@ -297,13 +299,23 @@ public class FrameContainer {
 
         // Mixed Mode Button
         mixedModeBtn = new JRoundedButton("Mixed Mode");
-        mixedModeBtn.setBounds(80, 210, 285, 35);
+        mixedModeBtn.setBounds(80, 210, 145, 35);
         mixedModeBtn.setForeground(Color.WHITE);
         mixedModeBtn.setFont(buttonFont);
         mixedModeBtn.setBackground(buttonBgColor);
         mixedModeBtn.setBorder(new RoundBorder());
         mixedModeBtn.setBorderPainted(false);
         mixedModeBtn.setFocusPainted(false);
+
+        // Recent 100 Mode Button
+        recent100ModeBtn = new JRoundedButton("Recent 100");
+        recent100ModeBtn.setBounds(235, 210, 130, 35);
+        recent100ModeBtn.setForeground(Color.WHITE);
+        recent100ModeBtn.setFont(buttonFont);
+        recent100ModeBtn.setBackground(buttonBgColor);
+        recent100ModeBtn.setBorder(new RoundBorder());
+        recent100ModeBtn.setBorderPainted(false);
+        recent100ModeBtn.setFocusPainted(false);
 
         // Add component to panel
         panel.add(summaryLabel);
@@ -312,6 +324,7 @@ public class FrameContainer {
         panel.add(learningModeBtn);
         panel.add(reviewModeBtn);
         panel.add(mixedModeBtn);
+        panel.add(recent100ModeBtn);
 
         // Register Mode Panel Click Event
         registerModePanelClickEvent();
@@ -942,6 +955,43 @@ public class FrameContainer {
                 mixedModeBtn.setBackground(new Color(83, 81, 80));
             }
         });
+
+        recent100ModeBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                DataProcessor.setMode(4);
+                frame.remove(modePanel);
+                frame.add(studyPanel);
+
+                dkBtn.setVisible(true);
+                hmBtn.setVisible(true);
+                kimBtn.setVisible(true);
+                nwBtn.setVisible(false);
+                editBtn.setVisible(false);
+                btmBtn.setVisible(false);
+
+                // Get First Word
+                DataProcessor.nextWord();
+                wordLabel.setAnimationText(DataProcessor.getCurrentWord().getWord());
+                scoreLabel.setAnimationText(String.format("[%.2f]", DataProcessor.getCurrentWord().getLearnScore()));
+                pronounceLabel.setAnimationText(DataProcessor.getCurrentWord().getPronounce());
+                translationLabel.setAnimationText("*****************");
+                exampleLabel.setAnimationText("******************************");
+
+                frame.validate();
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                recent100ModeBtn.setBackground(new Color(98, 96, 95));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                recent100ModeBtn.setBackground(new Color(83, 81, 80));
+            }
+        });
     }
 
     /**
@@ -1187,6 +1237,7 @@ public class FrameContainer {
             public void mouseReleased(MouseEvent e) {
                 frame.remove(studyPanel);
                 frame.add(modePanel);
+                DataProcessor.clearMode4Word();
                 refreshModePanel();
                 frame.validate();
                 frame.repaint();
