@@ -2,7 +2,6 @@ package com.ensk.study.vocabulary;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -10,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -144,8 +144,10 @@ public class FrameContainer {
         // Set Background Color
         frame.getContentPane().setBackground(panelBgColor);
         // Set App Icon
-        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "\\appicon.png");
-        frame.setIconImage(imageIcon.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
+        URL iconURL = FrameContainer.class.getResource("/appicon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        frame.setIconImage(icon.getImage());
+
         // frame.add(studyPanel);
         frame.addWindowListener(new WindowAdapter() {
             @Override
