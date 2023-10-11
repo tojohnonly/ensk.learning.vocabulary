@@ -31,8 +31,11 @@ public class FrameContainer {
     static Font buttonFont = new Font("Microsoft YaHei UI", Font.PLAIN, 15);
 
     // Color
-    static Color panelBgColor = new Color(65, 63, 62);
-    static Color buttonBgColor = new Color(83, 81, 80);
+    static Color panelBgColor = new Color(41, 41, 41);
+    static Color buttonBgColor = new Color(70, 70, 70);
+    static Color buttonHoverColor = new Color(96, 96, 96);
+
+    
 
     // Main Frame
     static final JFrame frame = new JFrame("Learning");
@@ -212,7 +215,7 @@ public class FrameContainer {
                 if (!okBtn.isEnabled()) {
                     return;
                 }
-                okBtn.setBackground(new Color(98, 96, 95));
+                okBtn.setBackground(buttonHoverColor);
             }
 
             @Override
@@ -220,7 +223,7 @@ public class FrameContainer {
                 if (!okBtn.isEnabled()) {
                     return;
                 }
-                okBtn.setBackground(new Color(83, 81, 80));
+                okBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -402,7 +405,7 @@ public class FrameContainer {
         // 组件设置为绝对定位
         panel.setLayout(null);
         // 设置背景色
-        panel.setBackground(new Color(65, 63, 62));
+        panel.setBackground(panelBgColor);
 
         // Word Add Label
         wordAddLabel = new JLabel("Word:");
@@ -515,7 +518,7 @@ public class FrameContainer {
         // Component Absolute Positioning
         panel.setLayout(null);
         // Set Background Color
-        panel.setBackground(new Color(65, 63, 62));
+        panel.setBackground(panelBgColor);
 
         // word
         wordLabel = new JAnimationLabel("", 20);
@@ -642,7 +645,7 @@ public class FrameContainer {
         // 组件设置为绝对定位
         panel.setLayout(null);
         // 设置背景色
-        panel.setBackground(new Color(65, 63, 62));
+        panel.setBackground(panelBgColor);
 
         // Word Edit Label
         wordEditLabel = new JLabel("Word:");
@@ -767,7 +770,7 @@ public class FrameContainer {
                 if (!addWordBtn.isEnabled()) {
                     return;
                 }
-                addWordBtn.setBackground(new Color(83, 81, 80));
+                addWordBtn.setBackground(buttonBgColor);
                 frame.remove(modePanel);
                 frame.add(addPanel);
                 frame.validate();
@@ -787,7 +790,7 @@ public class FrameContainer {
                 if (!addWordBtn.isEnabled()) {
                     return;
                 }
-                addWordBtn.setBackground(new Color(83, 81, 80));
+                addWordBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -825,7 +828,7 @@ public class FrameContainer {
                 if (!learningModeBtn.isEnabled()) {
                     return;
                 }
-                learningModeBtn.setBackground(new Color(98, 96, 95));
+                learningModeBtn.setBackground(buttonHoverColor);
             }
 
             @Override
@@ -833,7 +836,7 @@ public class FrameContainer {
                 if (!learningModeBtn.isEnabled()) {
                     return;
                 }
-                learningModeBtn.setBackground(new Color(83, 81, 80));
+                learningModeBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -843,7 +846,7 @@ public class FrameContainer {
                 if (!chooseBookBtn.isEnabled()) {
                     return;
                 }
-                chooseBookBtn.setBackground(new Color(83, 81, 80));
+                chooseBookBtn.setBackground(buttonBgColor);
 
                 // Open FileChooser
                 JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
@@ -871,7 +874,7 @@ public class FrameContainer {
                     frame.validate();
                     frame.repaint();
                 }
-                
+
             }
 
             @Override
@@ -925,7 +928,7 @@ public class FrameContainer {
                 if (!reviewModeBtn.isEnabled()) {
                     return;
                 }
-                reviewModeBtn.setBackground(new Color(98, 96, 95));
+                reviewModeBtn.setBackground(buttonHoverColor);
             }
 
             @Override
@@ -933,7 +936,7 @@ public class FrameContainer {
                 if (!reviewModeBtn.isEnabled()) {
                     return;
                 }
-                reviewModeBtn.setBackground(new Color(83, 81, 80));
+                reviewModeBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -965,12 +968,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                mixedModeBtn.setBackground(new Color(98, 96, 95));
+                mixedModeBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                mixedModeBtn.setBackground(new Color(83, 81, 80));
+                mixedModeBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1008,7 +1011,7 @@ public class FrameContainer {
                 if (!recent100ModeBtn.isEnabled()) {
                     return;
                 }
-                recent100ModeBtn.setBackground(new Color(98, 96, 95));
+                recent100ModeBtn.setBackground(buttonHoverColor);
             }
 
             @Override
@@ -1016,7 +1019,7 @@ public class FrameContainer {
                 if (!recent100ModeBtn.isEnabled()) {
                     return;
                 }
-                recent100ModeBtn.setBackground(new Color(83, 81, 80));
+                recent100ModeBtn.setBackground(buttonBgColor);
             }
         });
     }
@@ -1084,12 +1087,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                addCfmBtn.setBackground(new Color(98, 96, 95));
+                addCfmBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                addCfmBtn.setBackground(new Color(83, 81, 80));
+                addCfmBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1109,12 +1112,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                addCxlBtn.setBackground(new Color(98, 96, 95));
+                addCxlBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                addCxlBtn.setBackground(new Color(83, 81, 80));
+                addCxlBtn.setBackground(buttonBgColor);
             }
         });
     }
@@ -1144,12 +1147,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                dkBtn.setBackground(new Color(98, 96, 95));
+                dkBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                dkBtn.setBackground(new Color(83, 81, 80));
+                dkBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1169,12 +1172,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                hmBtn.setBackground(new Color(98, 96, 95));
+                hmBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                hmBtn.setBackground(new Color(83, 81, 80));
+                hmBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1194,12 +1197,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                kimBtn.setBackground(new Color(98, 96, 95));
+                kimBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                kimBtn.setBackground(new Color(83, 81, 80));
+                kimBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1222,12 +1225,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                nwBtn.setBackground(new Color(98, 96, 95));
+                nwBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                nwBtn.setBackground(new Color(83, 81, 80));
+                nwBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1250,12 +1253,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                editBtn.setBackground(new Color(98, 96, 95));
+                editBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                editBtn.setBackground(new Color(83, 81, 80));
+                editBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1271,12 +1274,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                btmBtn.setBackground(new Color(98, 96, 95));
+                btmBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                btmBtn.setBackground(new Color(83, 81, 80));
+                btmBtn.setBackground(buttonBgColor);
             }
         });
     }
@@ -1315,12 +1318,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                editCfmBtn.setBackground(new Color(98, 96, 95));
+                editCfmBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                editCfmBtn.setBackground(new Color(83, 81, 80));
+                editCfmBtn.setBackground(buttonBgColor);
             }
         });
 
@@ -1335,12 +1338,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                editCxlBtn.setBackground(new Color(98, 96, 95));
+                editCxlBtn.setBackground(buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                editCxlBtn.setBackground(new Color(83, 81, 80));
+                editCxlBtn.setBackground(buttonBgColor);
             }
         });
     }
