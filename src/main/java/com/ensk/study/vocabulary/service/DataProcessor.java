@@ -1,5 +1,6 @@
 package com.ensk.study.vocabulary.service;
 
+import com.ensk.study.vocabulary.config.EsvConfig;
 import com.ensk.study.vocabulary.entity.WordEntity;
 
 import java.io.File;
@@ -22,7 +23,8 @@ public class DataProcessor {
 
     public static void connectDatabase() {
         // Get Database File Path
-        String dbPath = System.getProperty("bookpath");
+        // String dbPath = System.getProperty("bookpath");
+        String dbPath = EsvConfig.dbPath;
         if (null == dbPath || dbPath.equals("")) {
             File userDir = new File(System.getProperty("user.dir"));
             File[] dbs = userDir.listFiles(userDirFile -> {

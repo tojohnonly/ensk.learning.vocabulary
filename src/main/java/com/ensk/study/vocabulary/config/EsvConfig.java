@@ -10,6 +10,9 @@ public class EsvConfig {
 
     public static Properties properties = getProperties();
 
+
+    public static String dbPath = getDbPath();
+
     // Color
     public static Color bgColor = getBgColor();
     public static Color buttonBgColor = getButtonBgColor();
@@ -24,7 +27,7 @@ public class EsvConfig {
 
     private static Properties getProperties() {
         String currentDir = System.getProperty("user.dir");
-        String configFilePath = currentDir + "/wts.conf";
+        String configFilePath = currentDir + "/esv.conf";
         Properties properties = new Properties();
         try {
             FileInputStream fileInputStream = new FileInputStream(configFilePath);
@@ -34,6 +37,10 @@ public class EsvConfig {
             e.printStackTrace();
         }
         return properties;
+    }
+
+    private static String getDbPath() {
+        return properties.getProperty("db.path");
     }
 
     private static Color getBgColor() {
