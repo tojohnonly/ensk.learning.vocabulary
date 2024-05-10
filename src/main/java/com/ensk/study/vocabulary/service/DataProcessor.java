@@ -221,7 +221,7 @@ public class DataProcessor {
 
     public static WordEntity queryWord(String wordReq) {
         try {
-            String sql = "SELECT * FROM VOCABULARY WHERE WORD = '" + wordReq + "'";
+            String sql = "SELECT * FROM VOCABULARY WHERE LOWER(WORD) = '" + wordReq.toLowerCase() + "'";
             ResultSet resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 WordEntity word = new WordEntity();
@@ -401,8 +401,7 @@ public class DataProcessor {
             needUpdate = true;
         }
         if (needUpdate) {
-            String sql = sqlUpdateWord.substring(0, sqlUpdateWord.length() - 2) + " WHERE ID = "
-                + DataProcessor.getCurrentWord().getId();
+            String sql = sqlUpdateWord.substring(0, sqlUpdateWord.length() - 2) + " WHERE ID = " + DataProcessor.getCurrentWord().getId();
             try {
                 statement.executeUpdate(sql);
             } catch (SQLException e) {

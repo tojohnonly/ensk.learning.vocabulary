@@ -170,6 +170,12 @@ public class EditWordPanel extends JPanel {
                     editNoticeLabel.setAnimationText("Translation Can't Be Null!");
                     return;
                 }
+                if (!DataProcessor.getCurrentWord().getWord().toLowerCase().equals(wordEditTextField.getText().toLowerCase())
+                        && (null != DataProcessor.queryWord(wordEditTextField.getText()))) {
+                    editNoticeLabel.setAnimationText("Another Word Alread Exist!");
+                    return;
+                }
+                editNoticeLabel.setAnimationText("");
                 DataProcessor.updateCurrentWord(wordEditTextField.getText(), pronounceEditTextField.getText(), translationEditTextField.getText(), exampleEditTextField.getText());
                 FrameContainer.switchEditToStudy(wordEditTextField.getText(), pronounceEditTextField.getText(), translationEditTextField.getText(), exampleEditTextField.getText());
             }
@@ -188,6 +194,7 @@ public class EditWordPanel extends JPanel {
         editCancelBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                editNoticeLabel.setAnimationText("");
                 FrameContainer.switchEditToStudy();
             }
 
