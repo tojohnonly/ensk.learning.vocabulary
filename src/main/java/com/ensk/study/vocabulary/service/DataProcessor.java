@@ -220,6 +220,7 @@ public class DataProcessor {
 
 
     public static WordEntity queryWord(String wordReq) {
+        wordReq = wordReq.replace("'", "''");
         try {
             String sql = "SELECT * FROM VOCABULARY WHERE LOWER(WORD) = '" + wordReq.toLowerCase() + "'";
             ResultSet resultSet = statement.executeQuery(sql);
@@ -356,6 +357,10 @@ public class DataProcessor {
 
 
     public static void addWord(String word, String pronounce, String translation, String example) {
+        word = word.replace("'", "''");
+        pronounce = pronounce.replace("'", "''");
+        translation = translation.replace("'", "''");
+        example = example.replace("'", "''");
         String sqlAddWord = "INSERT INTO VOCABULARY (WORD, PRONOUNCE, TRANSLATION, EXAMPLE) VALUES ('" + word + "', "
             + ((null == pronounce || pronounce.equals("")) ? "NULL, '" : ("'" + pronounce + "', '")) + translation
             + "', " + ((null == example || example.equals("")) ? "NULL);" : ("'" + example + "');"));
@@ -370,6 +375,10 @@ public class DataProcessor {
 
 
     public static void updateCurrentWord(String word, String pronounce, String translation, String example) {
+        word = word.replace("'", "''");
+        pronounce = pronounce.replace("'", "''");
+        translation = translation.replace("'", "''");
+        example = example.replace("'", "''");
         StringBuilder sqlUpdateWord = new StringBuilder("UPDATE VOCABULARY SET ");
         Boolean needUpdate = false;
         if (!DataProcessor.checkEqual(word, DataProcessor.getCurrentWord().getWord())) {
