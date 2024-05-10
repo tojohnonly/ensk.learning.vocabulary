@@ -1,32 +1,24 @@
 package com.ensk.study.vocabulary.panel;
 
 import java.awt.Color;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import com.ensk.study.vocabulary.config.EsvConfig;
 import com.ensk.study.vocabulary.service.DataProcessor;
 import com.ensk.study.vocabulary.ui.JAnimationLabel;
 import com.ensk.study.vocabulary.ui.JRoundedButton;
-import com.ensk.study.vocabulary.ui.JRoundedTextField;
 
 public class FrameContainer {
     
     // Main Frame
     static final JFrame frame = new JFrame("Learning");
-
     // Assemble Mode Select Panel
     private static ModeSelectPanel modeSelectPanel;
     // Assemble Add Word Panel
@@ -35,6 +27,8 @@ public class FrameContainer {
     private static StudyPanel studyPanel;
     // Assemble Edit Word Panel
     private static EditWordPanel editWordPanel;
+
+
 
     public static void start() {
         // Set Main Window Size

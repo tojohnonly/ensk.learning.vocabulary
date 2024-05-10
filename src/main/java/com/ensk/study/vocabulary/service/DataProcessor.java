@@ -21,6 +21,8 @@ public class DataProcessor {
     private static Integer studyMode;
     private static List<Integer> recentWordIds;
 
+
+
     public static void connectDatabase() {
         // Get Database File Path
         // String dbPath = System.getProperty("bookpath");
@@ -59,6 +61,8 @@ public class DataProcessor {
         }
     }
 
+
+
     public static void switchDatabase(String dbPath) {
         try {
             // Close Current Connection
@@ -89,6 +93,8 @@ public class DataProcessor {
         }
     }
 
+
+
     public static void closeConnection() {
         try {
             if (null != statement) {
@@ -103,9 +109,13 @@ public class DataProcessor {
         System.out.println("Close Database Connection Successfully");
     }
 
+
+
     public static void setMode(Integer mode) {
         studyMode = mode;
     }
+
+
 
     public static Boolean checkModeAvailable(Integer mode) {
         try {
@@ -132,6 +142,8 @@ public class DataProcessor {
         }
     }
 
+
+
     public static Integer getMode4WordId() {
         try {
             if (null == recentWordIds) {
@@ -157,9 +169,13 @@ public class DataProcessor {
         }
     }
 
+
+
     public static void clearMode4Word() {
         recentWordIds = null;
     }
+
+
 
     public static void nextWord() {
         try {
@@ -201,6 +217,8 @@ public class DataProcessor {
         }
     }
 
+
+
     public static WordEntity queryWord(String wordReq) {
         try {
             String sql = "SELECT * FROM VOCABULARY WHERE WORD = '" + wordReq + "'";
@@ -227,6 +245,7 @@ public class DataProcessor {
             throw new RuntimeException("Get Next Word Error: " + e.getMessage());
         }
     }
+
 
 
     public static void updateScore(WordEntity word, Integer mode) {
@@ -262,6 +281,8 @@ public class DataProcessor {
         }
     }
 
+
+
     public static Float calculateScore(String learnHistory) {
         Float score = 0f;
         for (char c : learnHistory.toCharArray()) {
@@ -282,9 +303,13 @@ public class DataProcessor {
         return (score / learnHistory.length());
     }
 
+
+
     public static WordEntity getCurrentWord() {
         return currentWord;
     }
+
+
 
     public static Boolean checkEqual(String a, String b) {
         if (null == a && null == b) {
@@ -295,6 +320,8 @@ public class DataProcessor {
             return a.equals(b);
         }
     }
+
+
 
     public static Integer getWordCount(Integer studyStage) {
         try {
@@ -326,6 +353,8 @@ public class DataProcessor {
         }
     }
 
+
+
     public static void addWord(String word, String pronounce, String translation, String example) {
         String sqlAddWord = "INSERT INTO VOCABULARY (WORD, PRONOUNCE, TRANSLATION, EXAMPLE) VALUES ('" + word + "', "
             + ((null == pronounce || pronounce.equals("")) ? "NULL, '" : ("'" + pronounce + "', '")) + translation
@@ -337,6 +366,8 @@ public class DataProcessor {
                 throw new RuntimeException("Add Word Error: " + e.getMessage());
             }
     }
+
+
 
     public static void updateCurrentWord(String word, String pronounce, String translation, String example) {
         StringBuilder sqlUpdateWord = new StringBuilder("UPDATE VOCABULARY SET ");

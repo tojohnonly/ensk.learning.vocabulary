@@ -1,20 +1,20 @@
 package com.ensk.study.vocabulary.panel;
 
-import com.ensk.study.vocabulary.config.EsvConfig;
-import com.ensk.study.vocabulary.service.DataProcessor;
-import com.ensk.study.vocabulary.ui.JAnimationLabel;
-import com.ensk.study.vocabulary.ui.JRoundedButton;
-import com.ensk.study.vocabulary.ui.JRoundedTextField;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import com.ensk.study.vocabulary.config.EsvConfig;
+import com.ensk.study.vocabulary.service.DataProcessor;
+import com.ensk.study.vocabulary.ui.JAnimationLabel;
+import com.ensk.study.vocabulary.ui.JRoundedButton;
+import com.ensk.study.vocabulary.ui.JRoundedTextField;
 
 public class AddWordPanel extends JPanel {
 
@@ -42,11 +42,10 @@ public class AddWordPanel extends JPanel {
     private static JRoundedButton addCancelBtn;
 
 
+
     public AddWordPanel() {
         super();
-        // 组件设置为绝对定位
         this.setLayout(null);
-        // 设置背景色
         this.setBackground(EsvConfig.bgColor);
 
         // Add Word Label

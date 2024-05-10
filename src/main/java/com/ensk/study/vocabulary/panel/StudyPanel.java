@@ -1,14 +1,15 @@
 package com.ensk.study.vocabulary.panel;
 
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JPanel;
+
 import com.ensk.study.vocabulary.config.EsvConfig;
 import com.ensk.study.vocabulary.service.DataProcessor;
 import com.ensk.study.vocabulary.ui.JAnimationLabel;
 import com.ensk.study.vocabulary.ui.JRoundedButton;
-
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class StudyPanel extends JPanel {
 
@@ -34,6 +35,8 @@ public class StudyPanel extends JPanel {
     private static JRoundedButton editBtn;
     // Back to Mode Select Button
     private static JRoundedButton btmBtn;
+
+
 
     public StudyPanel() {
         super();

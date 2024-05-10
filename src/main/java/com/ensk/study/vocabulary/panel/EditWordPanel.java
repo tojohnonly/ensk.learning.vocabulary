@@ -1,18 +1,18 @@
 package com.ensk.study.vocabulary.panel;
 
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import com.ensk.study.vocabulary.config.EsvConfig;
 import com.ensk.study.vocabulary.service.DataProcessor;
 import com.ensk.study.vocabulary.ui.JAnimationLabel;
 import com.ensk.study.vocabulary.ui.JRoundedButton;
 import com.ensk.study.vocabulary.ui.JRoundedTextField;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class EditWordPanel extends JPanel {
 
@@ -39,11 +39,11 @@ public class EditWordPanel extends JPanel {
     // Edit Cancel Button
     private static JRoundedButton editCancelBtn;
 
+
+
     public EditWordPanel() {
         super();
-        // 组件设置为绝对定位
         this.setLayout(null);
-        // 设置背景色
         this.setBackground(EsvConfig.bgColor);
 
         // Word Edit Label

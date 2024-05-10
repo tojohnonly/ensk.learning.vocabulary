@@ -1,10 +1,5 @@
 package com.ensk.study.vocabulary.panel;
 
-import com.ensk.study.vocabulary.config.EsvConfig;
-import com.ensk.study.vocabulary.service.DataProcessor;
-import com.ensk.study.vocabulary.ui.JAnimationLabel;
-import com.ensk.study.vocabulary.ui.JRoundedButton;
-
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,6 +8,11 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
+
+import com.ensk.study.vocabulary.config.EsvConfig;
+import com.ensk.study.vocabulary.service.DataProcessor;
+import com.ensk.study.vocabulary.ui.JAnimationLabel;
+import com.ensk.study.vocabulary.ui.JRoundedButton;
 
 public class ModeSelectPanel extends JPanel {
 
@@ -30,6 +30,8 @@ public class ModeSelectPanel extends JPanel {
     // Recent 100 Mode Button
     private JRoundedButton recent100ModeBtn;
 
+
+
     public ModeSelectPanel() {
         super();
         // Component Absolute Positioning
@@ -41,8 +43,7 @@ public class ModeSelectPanel extends JPanel {
         Integer masteredWordCount = DataProcessor.getWordCount(4);
 
         // Summary
-        summaryLabel = new JAnimationLabel("All Words:&nbsp;&nbsp;&nbsp;" + allWordCount
-                + "<br/>Unstudied:&nbsp;&nbsp;" + unstudiedWordCount + "<br/>Mastered:&nbsp;&nbsp;&nbsp;" + masteredWordCount, 10);
+        summaryLabel = new JAnimationLabel("All Words:&nbsp;&nbsp;&nbsp;" + allWordCount + "<br/>Unstudied:&nbsp;&nbsp;" + unstudiedWordCount + "<br/>Mastered:&nbsp;&nbsp;&nbsp;" + masteredWordCount, 10);
         // JLabel summaryLabel = new JLabel("<html><body style=\"width:400px;text-align:center\">" + "All Words: 5366
         // Learned: 2377" + "<body></html>");
         summaryLabel.setBounds(80, 20, 150, 60);
