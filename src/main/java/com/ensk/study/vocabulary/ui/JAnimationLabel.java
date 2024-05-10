@@ -1,4 +1,4 @@
-package com.ensk.study.vocabulary;
+package com.ensk.study.vocabulary.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

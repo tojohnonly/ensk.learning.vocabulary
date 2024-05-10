@@ -1,5 +1,8 @@
 package com.ensk.study.vocabulary;
 
+import com.ensk.study.vocabulary.service.ExceptionHandler;
+import com.ensk.study.vocabulary.ui.FrameContainer;
+
 import javax.swing.UIManager;
 
 public class Application {

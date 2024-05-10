@@ -1,7 +1,6 @@
-package com.ensk.study.vocabulary;
+package com.ensk.study.vocabulary.ui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -17,26 +16,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
+import com.ensk.study.vocabulary.config.EsvConfig;
+import com.ensk.study.vocabulary.service.DataProcessor;
+
 public class FrameContainer {
-
-    // Font
-    static Font wordFont = new Font("Microsoft YaHei UI", Font.PLAIN, 25);
-    static Font pronounceFont = new Font(Font.SERIF, Font.PLAIN, 17);
-    static Font translationFont = new Font("霞鹜文楷", Font.PLAIN, 19);
-    static Font exampleFont = new Font("霞鹜文楷", Font.PLAIN, 15);
-    static Font buttonFont = new Font("Microsoft YaHei UI", Font.PLAIN, 15);
-
-    // Color
-    static Color panelBgColor = new Color(41, 41, 41);
-    static Color buttonBgColor = new Color(70, 70, 70);
-    static Color buttonHoverColor = new Color(96, 96, 96);
-
     
-
     // Main Frame
     static final JFrame frame = new JFrame("Learning");
 
@@ -58,19 +45,19 @@ public class FrameContainer {
     // Word Add Label
     private static JLabel wordAddLabel;
     // Word Add Field
-    private static JTextField wordAddTextField;
+    private static JRoundedTextField wordAddTextField;
     // Pronounce Add Label
     private static JLabel pronounceAddLabel;
     // Pronounce Add Field
-    private static JTextField pronounceAddTextField;
+    private static JRoundedTextField pronounceAddTextField;
     // Translation Add Label
     private static JLabel translationAddLabel;
     // Translation Add Text Field
-    private static JTextField translationAddTextField;
+    private static JRoundedTextField translationAddTextField;
     // Example Add Label
     private static JLabel exampleAddLabel;
     // Example Add Text Field
-    private static JTextField exampleAddTextField;
+    private static JRoundedTextField exampleAddTextField;
     // Add Notice Label
     private static JAnimationLabel addNoticeLabel;
     // Add Confirm Button
@@ -104,19 +91,19 @@ public class FrameContainer {
     // Word Edit Label
     private static JLabel wordEditLabel;
     // Word Edit Text Field
-    private static JTextField wordEditTextField;
+    private static JRoundedTextField wordEditTextField;
     // Pronounce Edit Label
     private static JLabel pronounceEditLabel;
     // Pronounce Edit Text Field
-    private static JTextField pronounceEditTextField;
+    private static JRoundedTextField pronounceEditTextField;
     // Translation Edit Label
     private static JLabel translationEditLabel;
     // Translation Edit Text Field
-    private static JTextField translationEditTextField;
+    private static JRoundedTextField translationEditTextField;
     // Example Edit Label
     private static JLabel exampleEditLabel;
     // Example Edit Text Field
-    private static JTextField exampleEditTextField;
+    private static JRoundedTextField exampleEditTextField;
     // Edit Notice Label
     private static JAnimationLabel editNoticeLabel;
     // Edit Confirm Button
@@ -145,7 +132,7 @@ public class FrameContainer {
         // Set Default Close Operation
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Set Background Color
-        frame.getContentPane().setBackground(panelBgColor);
+        frame.getContentPane().setBackground(EsvConfig.bgColor);
         // Set App Icon
         URL iconURL = FrameContainer.class.getResource("/appicon.png");
         ImageIcon icon = new ImageIcon(iconURL);
@@ -191,16 +178,15 @@ public class FrameContainer {
         // Notice Label
         JAnimationLabel noticeLabel = new JAnimationLabel(message, 10);
         noticeLabel.setBounds(60, 30, 340, 150);
-        noticeLabel.setFont(translationFont);
+        noticeLabel.setFont(EsvConfig.translationFont);
         noticeLabel.setForeground(Color.RED);
 
         // OK Button
         JRoundedButton okBtn = new JRoundedButton("OK");
         okBtn.setBounds(150, 200, 140, 35);
         okBtn.setForeground(Color.RED);
-        okBtn.setFont(buttonFont);
-        okBtn.setBackground(buttonBgColor);
-        okBtn.setBorder(new RoundBorder());
+        okBtn.setFont(EsvConfig.buttonFont);
+        okBtn.setBackground(EsvConfig.buttonBgColor);
         okBtn.setBorderPainted(false);
         okBtn.setFocusPainted(false);
         okBtn.addMouseListener(new MouseAdapter() {
@@ -215,7 +201,7 @@ public class FrameContainer {
                 if (!okBtn.isEnabled()) {
                     return;
                 }
-                okBtn.setBackground(buttonHoverColor);
+                okBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
@@ -223,7 +209,7 @@ public class FrameContainer {
                 if (!okBtn.isEnabled()) {
                     return;
                 }
-                okBtn.setBackground(buttonBgColor);
+                okBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -247,7 +233,7 @@ public class FrameContainer {
         // Component Absolute Positioning
         panel.setLayout(null);
         // Background Color
-        panel.setBackground(panelBgColor);
+        panel.setBackground(EsvConfig.bgColor);
 
         Integer allWordCount = DataProcessor.getWordCount(0);
         Integer unstudiedWordCount = DataProcessor.getWordCount(1);
@@ -259,16 +245,15 @@ public class FrameContainer {
         // JLabel summaryLabel = new JLabel("<html><body style=\"width:400px;text-align:center\">" + "All Words: 5366
         // Learned: 2377" + "<body></html>");
         summaryLabel.setBounds(80, 20, 150, 60);
-        summaryLabel.setFont(buttonFont);
+        summaryLabel.setFont(EsvConfig.buttonFont);
         summaryLabel.setForeground(Color.WHITE);
 
         // Start Learning New Words Button
         addWordBtn = new JRoundedButton("Add Word");
         addWordBtn.setBounds(250, 20, 115, 60);
         addWordBtn.setForeground(Color.WHITE);
-        addWordBtn.setFont(buttonFont);
-        addWordBtn.setBackground(buttonBgColor);
-        addWordBtn.setBorder(new RoundBorder());
+        addWordBtn.setFont(EsvConfig.buttonFont);
+        addWordBtn.setBackground(EsvConfig.buttonBgColor);
         addWordBtn.setBorderPainted(false);
         addWordBtn.setFocusPainted(false);
 
@@ -276,9 +261,8 @@ public class FrameContainer {
         learningModeBtn = new JRoundedButton("Start Learning New Words");
         learningModeBtn.setBounds(80, 110, 215, 35);
         learningModeBtn.setForeground(Color.WHITE);
-        learningModeBtn.setFont(buttonFont);
-        learningModeBtn.setBackground(buttonBgColor);
-        learningModeBtn.setBorder(new RoundBorder());
+        learningModeBtn.setFont(EsvConfig.buttonFont);
+        learningModeBtn.setBackground(EsvConfig.buttonBgColor);
         learningModeBtn.setBorderPainted(false);
         learningModeBtn.setFocusPainted(false);
 
@@ -286,9 +270,8 @@ public class FrameContainer {
         chooseBookBtn = new JRoundedButton("Books");
         chooseBookBtn.setBounds(305, 110, 60, 35);
         chooseBookBtn.setForeground(Color.WHITE);
-        chooseBookBtn.setFont(buttonFont);
+        chooseBookBtn.setFont(EsvConfig.buttonFont);
         chooseBookBtn.setBackground(new Color(232, 151, 34));
-        chooseBookBtn.setBorder(new RoundBorder());
         chooseBookBtn.setBorderPainted(false);
         chooseBookBtn.setFocusPainted(false);
 
@@ -296,9 +279,8 @@ public class FrameContainer {
         reviewModeBtn = new JRoundedButton("Review Learned Content");
         reviewModeBtn.setBounds(80, 160, 285, 35);
         reviewModeBtn.setForeground(Color.WHITE);
-        reviewModeBtn.setFont(buttonFont);
-        reviewModeBtn.setBackground(buttonBgColor);
-        reviewModeBtn.setBorder(new RoundBorder());
+        reviewModeBtn.setFont(EsvConfig.buttonFont);
+        reviewModeBtn.setBackground(EsvConfig.buttonBgColor);
         reviewModeBtn.setBorderPainted(false);
         reviewModeBtn.setFocusPainted(false);
 
@@ -306,9 +288,8 @@ public class FrameContainer {
         mixedModeBtn = new JRoundedButton("Mixed Mode");
         mixedModeBtn.setBounds(80, 210, 145, 35);
         mixedModeBtn.setForeground(Color.WHITE);
-        mixedModeBtn.setFont(buttonFont);
-        mixedModeBtn.setBackground(buttonBgColor);
-        mixedModeBtn.setBorder(new RoundBorder());
+        mixedModeBtn.setFont(EsvConfig.buttonFont);
+        mixedModeBtn.setBackground(EsvConfig.buttonBgColor);
         mixedModeBtn.setBorderPainted(false);
         mixedModeBtn.setFocusPainted(false);
 
@@ -316,9 +297,8 @@ public class FrameContainer {
         recent100ModeBtn = new JRoundedButton("Recent 100");
         recent100ModeBtn.setBounds(235, 210, 130, 35);
         recent100ModeBtn.setForeground(Color.WHITE);
-        recent100ModeBtn.setFont(buttonFont);
-        recent100ModeBtn.setBackground(buttonBgColor);
-        recent100ModeBtn.setBorder(new RoundBorder());
+        recent100ModeBtn.setFont(EsvConfig.buttonFont);
+        recent100ModeBtn.setBackground(EsvConfig.buttonBgColor);
         recent100ModeBtn.setBorderPainted(false);
         recent100ModeBtn.setFocusPainted(false);
 
@@ -405,82 +385,81 @@ public class FrameContainer {
         // 组件设置为绝对定位
         panel.setLayout(null);
         // 设置背景色
-        panel.setBackground(panelBgColor);
+        panel.setBackground(EsvConfig.bgColor);
 
         // Word Add Label
         wordAddLabel = new JLabel("Word:");
         wordAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         wordAddLabel.setBounds(40, 30, 90, 30);
-        wordAddLabel.setFont(buttonFont);
+        wordAddLabel.setFont(EsvConfig.buttonFont);
         wordAddLabel.setForeground(Color.WHITE);
 
         // Pronounce Add Label
         pronounceAddLabel = new JLabel("Pronounce:");
         pronounceAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         pronounceAddLabel.setBounds(40, 70, 90, 30);
-        pronounceAddLabel.setFont(buttonFont);
+        pronounceAddLabel.setFont(EsvConfig.buttonFont);
         pronounceAddLabel.setForeground(Color.WHITE);
 
         // Translation Add Label
         translationAddLabel = new JLabel("Translation:");
         translationAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         translationAddLabel.setBounds(40, 110, 90, 30);
-        translationAddLabel.setFont(buttonFont);
+        translationAddLabel.setFont(EsvConfig.buttonFont);
         translationAddLabel.setForeground(Color.WHITE);
 
         // Example Add Label
         exampleAddLabel = new JLabel("Example:");
         exampleAddLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         exampleAddLabel.setBounds(40, 150, 90, 30);
-        exampleAddLabel.setFont(buttonFont);
+        exampleAddLabel.setFont(EsvConfig.buttonFont);
         exampleAddLabel.setForeground(Color.WHITE);
 
         // Word Add Text Field
-        wordAddTextField = new JTextField();
+        wordAddTextField = new JRoundedTextField();
         wordAddTextField.setBounds(140, 30, 230, 30);
-        wordAddTextField.setFont(buttonFont);
+        wordAddTextField.setFont(EsvConfig.buttonFont);
         wordAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         wordAddTextField.setForeground(Color.WHITE);
-        wordAddTextField.setBackground(buttonBgColor);
+        wordAddTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Pronounce Add Text Field
-        pronounceAddTextField = new JTextField();
+        pronounceAddTextField = new JRoundedTextField();
         pronounceAddTextField.setBounds(140, 70, 230, 30);
-        pronounceAddTextField.setFont(pronounceFont);
+        pronounceAddTextField.setFont(EsvConfig.pronounceFont);
         pronounceAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         pronounceAddTextField.setForeground(Color.WHITE);
-        pronounceAddTextField.setBackground(buttonBgColor);
+        pronounceAddTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Translation Add Text Field
-        translationAddTextField = new JTextField();
+        translationAddTextField = new JRoundedTextField();
         translationAddTextField.setBounds(140, 110, 230, 30);
-        translationAddTextField.setFont(buttonFont);
+        translationAddTextField.setFont(EsvConfig.buttonFont);
         translationAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         translationAddTextField.setForeground(Color.WHITE);
-        translationAddTextField.setBackground(buttonBgColor);
+        translationAddTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Example Add Text Field
-        exampleAddTextField = new JTextField();
+        exampleAddTextField = new JRoundedTextField();
         exampleAddTextField.setBounds(140, 150, 230, 30);
-        exampleAddTextField.setFont(buttonFont);
+        exampleAddTextField.setFont(EsvConfig.buttonFont);
         exampleAddTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         exampleAddTextField.setForeground(Color.WHITE);
-        exampleAddTextField.setBackground(buttonBgColor);
+        exampleAddTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Add Notice Label
         addNoticeLabel = new JAnimationLabel("", 15);
         addNoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         addNoticeLabel.setBounds(60, 190, 300, 15);
-        addNoticeLabel.setFont(exampleFont);
+        addNoticeLabel.setFont(EsvConfig.exampleFont);
         addNoticeLabel.setForeground(Color.RED);
 
         // Add Confirm Button
         addCfmBtn = new JRoundedButton("Add");
         addCfmBtn.setBounds(100, 215, 100, 35);
         addCfmBtn.setForeground(Color.WHITE);
-        addCfmBtn.setFont(buttonFont);
-        addCfmBtn.setBackground(buttonBgColor);
-        addCfmBtn.setBorder(new RoundBorder());
+        addCfmBtn.setFont(EsvConfig.buttonFont);
+        addCfmBtn.setBackground(EsvConfig.buttonBgColor);
         addCfmBtn.setBorderPainted(false);
         addCfmBtn.setFocusPainted(false);
 
@@ -488,9 +467,8 @@ public class FrameContainer {
         addCxlBtn = new JRoundedButton("Cancel");
         addCxlBtn.setBounds(240, 215, 100, 35);
         addCxlBtn.setForeground(Color.WHITE);
-        addCxlBtn.setFont(buttonFont);
-        addCxlBtn.setBackground(buttonBgColor);
-        addCxlBtn.setBorder(new RoundBorder());
+        addCxlBtn.setFont(EsvConfig.buttonFont);
+        addCxlBtn.setBackground(EsvConfig.buttonBgColor);
         addCxlBtn.setBorderPainted(false);
         addCxlBtn.setFocusPainted(false);
 
@@ -518,45 +496,44 @@ public class FrameContainer {
         // Component Absolute Positioning
         panel.setLayout(null);
         // Set Background Color
-        panel.setBackground(panelBgColor);
+        panel.setBackground(EsvConfig.bgColor);
 
         // word
         wordLabel = new JAnimationLabel("", 20);
         wordLabel.setBounds(30, 15, 400, 35);
-        wordLabel.setFont(wordFont);
+        wordLabel.setFont(EsvConfig.wordFont);
         wordLabel.setForeground(Color.WHITE);
 
         // score
         scoreLabel = new JAnimationLabel("", 10);
         scoreLabel.setBounds(30, 60, 40, 25);
-        scoreLabel.setFont(pronounceFont);
+        scoreLabel.setFont(EsvConfig.pronounceFont);
         scoreLabel.setForeground(Color.WHITE);
 
         // pronounce
         pronounceLabel = new JAnimationLabel("", 20);
         pronounceLabel.setBounds(80, 60, 400, 25);
-        pronounceLabel.setFont(pronounceFont);
+        pronounceLabel.setFont(EsvConfig.pronounceFont);
         pronounceLabel.setForeground(Color.WHITE);
 
         // translation
         translationLabel = new JAnimationLabel("", 15);
         translationLabel.setBounds(30, 95, 400, 50);
-        translationLabel.setFont(translationFont);
+        translationLabel.setFont(EsvConfig.translationFont);
         translationLabel.setForeground(Color.WHITE);
 
         // example
         exampleLabel = new JAnimationLabel("", 5);
         exampleLabel.setBounds(30, 145, 400, 70);
-        exampleLabel.setFont(exampleFont);
+        exampleLabel.setFont(EsvConfig.exampleFont);
         exampleLabel.setForeground(Color.WHITE);
 
         // Don't Know Button
         dkBtn = new JRoundedButton("Don't Know");
         dkBtn.setBounds(30, 230, 110, 35);
         dkBtn.setForeground(Color.WHITE);
-        dkBtn.setFont(buttonFont);
-        dkBtn.setBackground(buttonBgColor);
-        dkBtn.setBorder(new RoundBorder());
+        dkBtn.setFont(EsvConfig.buttonFont);
+        dkBtn.setBackground(EsvConfig.buttonBgColor);
         dkBtn.setBorderPainted(false);
         dkBtn.setFocusPainted(false);
 
@@ -564,9 +541,8 @@ public class FrameContainer {
         hmBtn = new JRoundedButton("Hazy Memory");
         hmBtn.setBounds(155, 230, 125, 35);
         hmBtn.setForeground(Color.WHITE);
-        hmBtn.setFont(buttonFont);
-        hmBtn.setBackground(buttonBgColor);
-        hmBtn.setBorder(new RoundBorder());
+        hmBtn.setFont(EsvConfig.buttonFont);
+        hmBtn.setBackground(EsvConfig.buttonBgColor);
         hmBtn.setBorderPainted(false);
         hmBtn.setFocusPainted(false);
 
@@ -574,9 +550,8 @@ public class FrameContainer {
         kimBtn = new JRoundedButton("Keep in Mind");
         kimBtn.setBounds(295, 230, 125, 35);
         kimBtn.setForeground(Color.WHITE);
-        kimBtn.setFont(buttonFont);
-        kimBtn.setBackground(buttonBgColor);
-        kimBtn.setBorder(new RoundBorder());
+        kimBtn.setFont(EsvConfig.buttonFont);
+        kimBtn.setBackground(EsvConfig.buttonBgColor);
         kimBtn.setBorderPainted(false);
         kimBtn.setFocusPainted(false);
 
@@ -584,9 +559,8 @@ public class FrameContainer {
         nwBtn = new JRoundedButton("Next Word");
         nwBtn.setBounds(60, 230, 200, 35);
         nwBtn.setForeground(Color.WHITE);
-        nwBtn.setFont(buttonFont);
-        nwBtn.setBackground(buttonBgColor);
-        nwBtn.setBorder(new RoundBorder());
+        nwBtn.setFont(EsvConfig.buttonFont);
+        nwBtn.setBackground(EsvConfig.buttonBgColor);
         nwBtn.setBorderPainted(false);
         nwBtn.setFocusPainted(false);
         nwBtn.setVisible(false);
@@ -595,9 +569,8 @@ public class FrameContainer {
         editBtn = new JRoundedButton("Edit");
         editBtn.setBounds(270, 230, 50, 35);
         editBtn.setForeground(Color.WHITE);
-        editBtn.setFont(buttonFont);
-        editBtn.setBackground(buttonBgColor);
-        editBtn.setBorder(new RoundBorder());
+        editBtn.setFont(EsvConfig.buttonFont);
+        editBtn.setBackground(EsvConfig.buttonBgColor);
         editBtn.setBorderPainted(false);
         editBtn.setFocusPainted(false);
         editBtn.setVisible(false);
@@ -606,9 +579,8 @@ public class FrameContainer {
         btmBtn = new JRoundedButton("Mode");
         btmBtn.setBounds(330, 230, 60, 35);
         btmBtn.setForeground(Color.WHITE);
-        btmBtn.setFont(buttonFont);
-        btmBtn.setBackground(buttonBgColor);
-        btmBtn.setBorder(new RoundBorder());
+        btmBtn.setFont(EsvConfig.buttonFont);
+        btmBtn.setBackground(EsvConfig.buttonBgColor);
         btmBtn.setBorderPainted(false);
         btmBtn.setFocusPainted(false);
         btmBtn.setVisible(false);
@@ -645,83 +617,82 @@ public class FrameContainer {
         // 组件设置为绝对定位
         panel.setLayout(null);
         // 设置背景色
-        panel.setBackground(panelBgColor);
+        panel.setBackground(EsvConfig.bgColor);
 
         // Word Edit Label
         wordEditLabel = new JLabel("Word:");
         wordEditLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         wordEditLabel.setBounds(40, 30, 90, 30);
-        wordEditLabel.setFont(buttonFont);
+        wordEditLabel.setFont(EsvConfig.buttonFont);
         wordEditLabel.setForeground(Color.WHITE);
 
         // Pronounce Edit Label
         pronounceEditLabel = new JLabel("Pronounce:");
         pronounceEditLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         pronounceEditLabel.setBounds(40, 70, 90, 30);
-        pronounceEditLabel.setFont(buttonFont);
+        pronounceEditLabel.setFont(EsvConfig.buttonFont);
         pronounceEditLabel.setForeground(Color.WHITE);
 
         // Translation Edit Label
         translationEditLabel = new JLabel("Translation:");
         translationEditLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         translationEditLabel.setBounds(40, 110, 90, 30);
-        translationEditLabel.setFont(buttonFont);
+        translationEditLabel.setFont(EsvConfig.buttonFont);
         translationEditLabel.setForeground(Color.WHITE);
 
         // Example Edit Label
         exampleEditLabel = new JLabel("Example:");
         exampleEditLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         exampleEditLabel.setBounds(40, 150, 90, 30);
-        exampleEditLabel.setFont(buttonFont);
+        exampleEditLabel.setFont(EsvConfig.buttonFont);
         exampleEditLabel.setForeground(Color.WHITE);
 
         // Word Edit Text Field
-        wordEditTextField = new JTextField();
+        wordEditTextField = new JRoundedTextField();
         wordEditTextField.setBounds(140, 30, 230, 30);
-        wordEditTextField.setFont(buttonFont);
+        wordEditTextField.setFont(EsvConfig.buttonFont);
         // wordTextField.setBorder(new LineBorder(new Color(100,100,100), 0, true));
         wordEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         wordEditTextField.setForeground(Color.WHITE);
-        wordEditTextField.setBackground(buttonBgColor);
+        wordEditTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Pronounce Edit Text Field
-        pronounceEditTextField = new JTextField();
+        pronounceEditTextField = new JRoundedTextField();
         pronounceEditTextField.setBounds(140, 70, 230, 30);
-        pronounceEditTextField.setFont(pronounceFont);
+        pronounceEditTextField.setFont(EsvConfig.pronounceFont);
         pronounceEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         pronounceEditTextField.setForeground(Color.WHITE);
-        pronounceEditTextField.setBackground(buttonBgColor);
+        pronounceEditTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Translation Edit Text Field
-        translationEditTextField = new JTextField();
+        translationEditTextField = new JRoundedTextField();
         translationEditTextField.setBounds(140, 110, 230, 30);
-        translationEditTextField.setFont(buttonFont);
+        translationEditTextField.setFont(EsvConfig.buttonFont);
         translationEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         translationEditTextField.setForeground(Color.WHITE);
-        translationEditTextField.setBackground(buttonBgColor);
+        translationEditTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Example Edit Text Field
-        exampleEditTextField = new JTextField();
+        exampleEditTextField = new JRoundedTextField();
         exampleEditTextField.setBounds(140, 150, 230, 30);
-        exampleEditTextField.setFont(buttonFont);
+        exampleEditTextField.setFont(EsvConfig.buttonFont);
         exampleEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         exampleEditTextField.setForeground(Color.WHITE);
-        exampleEditTextField.setBackground(buttonBgColor);
+        exampleEditTextField.setBackground(EsvConfig.buttonBgColor);
 
         // Edit Notice Label
         editNoticeLabel = new JAnimationLabel("", 15);
         editNoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         editNoticeLabel.setBounds(60, 190, 300, 15);
-        editNoticeLabel.setFont(exampleFont);
+        editNoticeLabel.setFont(EsvConfig.exampleFont);
         editNoticeLabel.setForeground(Color.RED);
 
         // Edit Confirm Button
         editCfmBtn = new JRoundedButton("Confirm");
         editCfmBtn.setBounds(100, 215, 100, 35);
         editCfmBtn.setForeground(Color.WHITE);
-        editCfmBtn.setFont(buttonFont);
-        editCfmBtn.setBackground(buttonBgColor);
-        editCfmBtn.setBorder(new RoundBorder());
+        editCfmBtn.setFont(EsvConfig.buttonFont);
+        editCfmBtn.setBackground(EsvConfig.buttonBgColor);
         editCfmBtn.setBorderPainted(false);
         editCfmBtn.setFocusPainted(false);
 
@@ -729,9 +700,8 @@ public class FrameContainer {
         editCxlBtn = new JRoundedButton("Cancel");
         editCxlBtn.setBounds(240, 215, 100, 35);
         editCxlBtn.setForeground(Color.WHITE);
-        editCxlBtn.setFont(buttonFont);
-        editCxlBtn.setBackground(buttonBgColor);
-        editCxlBtn.setBorder(new RoundBorder());
+        editCxlBtn.setFont(EsvConfig.buttonFont);
+        editCxlBtn.setBackground(EsvConfig.buttonBgColor);
         editCxlBtn.setBorderPainted(false);
         editCxlBtn.setFocusPainted(false);
 
@@ -770,7 +740,7 @@ public class FrameContainer {
                 if (!addWordBtn.isEnabled()) {
                     return;
                 }
-                addWordBtn.setBackground(buttonBgColor);
+                addWordBtn.setBackground(EsvConfig.buttonBgColor);
                 frame.remove(modePanel);
                 frame.add(addPanel);
                 frame.validate();
@@ -790,7 +760,7 @@ public class FrameContainer {
                 if (!addWordBtn.isEnabled()) {
                     return;
                 }
-                addWordBtn.setBackground(buttonBgColor);
+                addWordBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -828,7 +798,7 @@ public class FrameContainer {
                 if (!learningModeBtn.isEnabled()) {
                     return;
                 }
-                learningModeBtn.setBackground(buttonHoverColor);
+                learningModeBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
@@ -836,7 +806,7 @@ public class FrameContainer {
                 if (!learningModeBtn.isEnabled()) {
                     return;
                 }
-                learningModeBtn.setBackground(buttonBgColor);
+                learningModeBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -846,7 +816,7 @@ public class FrameContainer {
                 if (!chooseBookBtn.isEnabled()) {
                     return;
                 }
-                chooseBookBtn.setBackground(buttonBgColor);
+                chooseBookBtn.setBackground(EsvConfig.buttonBgColor);
 
                 // Open FileChooser
                 JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
@@ -928,7 +898,7 @@ public class FrameContainer {
                 if (!reviewModeBtn.isEnabled()) {
                     return;
                 }
-                reviewModeBtn.setBackground(buttonHoverColor);
+                reviewModeBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
@@ -936,7 +906,7 @@ public class FrameContainer {
                 if (!reviewModeBtn.isEnabled()) {
                     return;
                 }
-                reviewModeBtn.setBackground(buttonBgColor);
+                reviewModeBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -968,12 +938,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                mixedModeBtn.setBackground(buttonHoverColor);
+                mixedModeBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                mixedModeBtn.setBackground(buttonBgColor);
+                mixedModeBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1011,7 +981,7 @@ public class FrameContainer {
                 if (!recent100ModeBtn.isEnabled()) {
                     return;
                 }
-                recent100ModeBtn.setBackground(buttonHoverColor);
+                recent100ModeBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
@@ -1019,7 +989,7 @@ public class FrameContainer {
                 if (!recent100ModeBtn.isEnabled()) {
                     return;
                 }
-                recent100ModeBtn.setBackground(buttonBgColor);
+                recent100ModeBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
     }
@@ -1087,12 +1057,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                addCfmBtn.setBackground(buttonHoverColor);
+                addCfmBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                addCfmBtn.setBackground(buttonBgColor);
+                addCfmBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1112,12 +1082,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                addCxlBtn.setBackground(buttonHoverColor);
+                addCxlBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                addCxlBtn.setBackground(buttonBgColor);
+                addCxlBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
     }
@@ -1147,12 +1117,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                dkBtn.setBackground(buttonHoverColor);
+                dkBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                dkBtn.setBackground(buttonBgColor);
+                dkBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1172,12 +1142,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                hmBtn.setBackground(buttonHoverColor);
+                hmBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                hmBtn.setBackground(buttonBgColor);
+                hmBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1197,12 +1167,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                kimBtn.setBackground(buttonHoverColor);
+                kimBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                kimBtn.setBackground(buttonBgColor);
+                kimBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1225,12 +1195,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                nwBtn.setBackground(buttonHoverColor);
+                nwBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                nwBtn.setBackground(buttonBgColor);
+                nwBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1253,12 +1223,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                editBtn.setBackground(buttonHoverColor);
+                editBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                editBtn.setBackground(buttonBgColor);
+                editBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1274,12 +1244,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                btmBtn.setBackground(buttonHoverColor);
+                btmBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                btmBtn.setBackground(buttonBgColor);
+                btmBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
     }
@@ -1305,7 +1275,7 @@ public class FrameContainer {
                     return;
                 }
                 DataProcessor.updateCurrentWord(wordEditTextField.getText(), pronounceEditTextField.getText(),
-                    translationEditTextField.getText(), exampleEditTextField.getText());
+                        translationEditTextField.getText(), exampleEditTextField.getText());
                 wordLabel.setAnimationText(wordEditTextField.getText());
                 pronounceLabel.setAnimationText(pronounceEditTextField.getText());
                 translationLabel.setAnimationText(translationEditTextField.getText());
@@ -1318,12 +1288,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                editCfmBtn.setBackground(buttonHoverColor);
+                editCfmBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                editCfmBtn.setBackground(buttonBgColor);
+                editCfmBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
 
@@ -1338,12 +1308,12 @@ public class FrameContainer {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                editCxlBtn.setBackground(buttonHoverColor);
+                editCxlBtn.setBackground(EsvConfig.buttonHoverColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                editCxlBtn.setBackground(buttonBgColor);
+                editCxlBtn.setBackground(EsvConfig.buttonBgColor);
             }
         });
     }

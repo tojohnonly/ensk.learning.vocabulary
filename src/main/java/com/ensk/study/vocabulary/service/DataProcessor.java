@@ -1,4 +1,6 @@
-package com.ensk.study.vocabulary;
+package com.ensk.study.vocabulary.service;
+
+import com.ensk.study.vocabulary.entity.WordEntity;
 
 import java.io.File;
 import java.sql.Connection;
@@ -18,7 +20,7 @@ public class DataProcessor {
     private static Integer studyMode;
     private static List<Integer> recentWordIds;
 
-    protected static void connectDatabase() {
+    public static void connectDatabase() {
         // Get Database File Path
         String dbPath = System.getProperty("bookpath");
         if (null == dbPath || dbPath.equals("")) {
@@ -55,7 +57,7 @@ public class DataProcessor {
         }
     }
 
-    protected static void switchDatabase(String dbPath) {
+    public static void switchDatabase(String dbPath) {
         try {
             // Close Current Connection
             if (null != statement) {
@@ -85,7 +87,7 @@ public class DataProcessor {
         }
     }
 
-    protected static void closeConnection() {
+    public static void closeConnection() {
         try {
             if (null != statement) {
                 statement.close();
@@ -99,11 +101,11 @@ public class DataProcessor {
         System.out.println("Close Database Connection Successfully");
     }
 
-    protected static void setMode(Integer mode) {
+    public static void setMode(Integer mode) {
         studyMode = mode;
     }
 
-    protected static Boolean checkModeAvailable(Integer mode) {
+    public static Boolean checkModeAvailable(Integer mode) {
         try {
             String sql = "";
             if (mode == 1) {

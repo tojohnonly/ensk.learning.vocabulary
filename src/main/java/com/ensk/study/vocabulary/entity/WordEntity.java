@@ -1,4 +1,4 @@
-package com.ensk.study.vocabulary;
+package com.ensk.study.vocabulary.entity;
 
 public class WordEntity {
 
