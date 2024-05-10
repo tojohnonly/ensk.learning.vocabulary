@@ -81,33 +81,33 @@ public class AddWordPanel extends JPanel {
         addWordTextField = new JRoundedTextField();
         addWordTextField.setBounds(140, 30, 230, 30);
         addWordTextField.setFont(EsvConfig.buttonFont);
-        addWordTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         addWordTextField.setForeground(Color.WHITE);
-        addWordTextField.setBackground(EsvConfig.buttonBgColor);
+        addWordTextField.setCaretColor(Color.WHITE);
+        addWordTextField.setBackground(EsvConfig.bgColor);
 
         // Add Pronounce Text Field
         addPronounceTextField = new JRoundedTextField();
         addPronounceTextField.setBounds(140, 70, 230, 30);
         addPronounceTextField.setFont(EsvConfig.pronounceFont);
-        addPronounceTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         addPronounceTextField.setForeground(Color.WHITE);
-        addPronounceTextField.setBackground(EsvConfig.buttonBgColor);
+        addPronounceTextField.setCaretColor(Color.WHITE);
+        addPronounceTextField.setBackground(EsvConfig.bgColor);
 
         // Add Translation Text Field
         addTranslationTextField = new JRoundedTextField();
         addTranslationTextField.setBounds(140, 110, 230, 30);
         addTranslationTextField.setFont(EsvConfig.buttonFont);
-        addTranslationTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         addTranslationTextField.setForeground(Color.WHITE);
-        addTranslationTextField.setBackground(EsvConfig.buttonBgColor);
+        addTranslationTextField.setCaretColor(Color.WHITE);
+        addTranslationTextField.setBackground(EsvConfig.bgColor);
 
         // Add Example Text Field
         addExampleTextField = new JRoundedTextField();
         addExampleTextField.setBounds(140, 150, 230, 30);
         addExampleTextField.setFont(EsvConfig.buttonFont);
-        addExampleTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         addExampleTextField.setForeground(Color.WHITE);
-        addExampleTextField.setBackground(EsvConfig.buttonBgColor);
+        addExampleTextField.setCaretColor(Color.WHITE);
+        addExampleTextField.setBackground(EsvConfig.bgColor);
 
         // Add Notice Label
         addNoticeLabel = new JAnimationLabel("", 15);

@@ -78,34 +78,33 @@ public class EditWordPanel extends JPanel {
         wordEditTextField = new JRoundedTextField();
         wordEditTextField.setBounds(140, 30, 230, 30);
         wordEditTextField.setFont(EsvConfig.buttonFont);
-        // wordTextField.setBorder(new LineBorder(new Color(100,100,100), 0, true));
-        wordEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         wordEditTextField.setForeground(Color.WHITE);
-        wordEditTextField.setBackground(EsvConfig.buttonBgColor);
+        wordEditTextField.setCaretColor(Color.WHITE);
+        wordEditTextField.setBackground(EsvConfig.bgColor);
 
         // Pronounce Edit Text Field
         pronounceEditTextField = new JRoundedTextField();
         pronounceEditTextField.setBounds(140, 70, 230, 30);
         pronounceEditTextField.setFont(EsvConfig.pronounceFont);
-        pronounceEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         pronounceEditTextField.setForeground(Color.WHITE);
-        pronounceEditTextField.setBackground(EsvConfig.buttonBgColor);
+        pronounceEditTextField.setCaretColor(Color.WHITE);
+        pronounceEditTextField.setBackground(EsvConfig.bgColor);
 
         // Translation Edit Text Field
         translationEditTextField = new JRoundedTextField();
         translationEditTextField.setBounds(140, 110, 230, 30);
         translationEditTextField.setFont(EsvConfig.buttonFont);
-        translationEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         translationEditTextField.setForeground(Color.WHITE);
-        translationEditTextField.setBackground(EsvConfig.buttonBgColor);
+        translationEditTextField.setCaretColor(Color.WHITE);
+        translationEditTextField.setBackground(EsvConfig.bgColor);
 
         // Example Edit Text Field
         exampleEditTextField = new JRoundedTextField();
         exampleEditTextField.setBounds(140, 150, 230, 30);
         exampleEditTextField.setFont(EsvConfig.buttonFont);
-        exampleEditTextField.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         exampleEditTextField.setForeground(Color.WHITE);
-        exampleEditTextField.setBackground(EsvConfig.buttonBgColor);
+        exampleEditTextField.setCaretColor(Color.WHITE);
+        exampleEditTextField.setBackground(EsvConfig.bgColor);
 
         // Edit Notice Label
         editNoticeLabel = new JAnimationLabel("", 15);
