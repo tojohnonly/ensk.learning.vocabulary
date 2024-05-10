@@ -1,6 +1,6 @@
 package com.ensk.study.vocabulary.service;
 
-import com.ensk.study.vocabulary.ui.FrameContainer;
+import com.ensk.study.vocabulary.panel.FrameContainer;
 
 public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 

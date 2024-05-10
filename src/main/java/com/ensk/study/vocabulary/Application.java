@@ -1,7 +1,7 @@
 package com.ensk.study.vocabulary;
 
 import com.ensk.study.vocabulary.service.ExceptionHandler;
-import com.ensk.study.vocabulary.ui.FrameContainer;
+import com.ensk.study.vocabulary.panel.FrameContainer;
 
 import javax.swing.UIManager;
 
